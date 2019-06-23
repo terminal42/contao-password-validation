@@ -1,0 +1,29 @@
+{
+  "name": "terminal42/contao-password-validation",
+  "type": "contao-bundle",
+  "description": "",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Terminal42\\PasswordValidationBundle\\": "src"
+    }
+  },
+  "require": {
+    "php": "^7.1",
+    "contao/core-bundle": "4.4.*",
+    "paragonie/hidden-string": "^1.0",
+    "symfony/config": "^3.3 || ^4.0",
+    "symfony/dependency-injection": "^3.3 || ^4.0",
+    "symfony/http-kernel": "^3.3 || ^4.0",
+    "terminal42/notification_center": "^1.3"
+  },
+  "require-dev": {
+    "contao/manager-plugin": "^2.7"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-develop": "1.0.x-dev"
+    },
+    "contao-manager-plugin": "Terminal42\\PasswordValidationBundle\\ContaoManager\\Plugin"
+  }
+}

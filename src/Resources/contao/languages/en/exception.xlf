@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<xliff version="1.1">
+    <file datatype="php" original="src/Resources/contao/languages/en/exception.php" source-language="en">
+        <body>
+            <trans-unit id="XPT.passwordValidation.maxLength">
+                <source>Please use a maximum of %s characters.</source>
+            </trans-unit>
+            <trans-unit id="XPT.passwordValidation.minLength">
+                <source>Please use a minimum of %s characters.</source>
+            </trans-unit>
+            <trans-unit id="XPT.passwordValidation.passwordHistory">
+                <source>Please do not reuse any recent password but choose a new unique password.</source>
+            </trans-unit>
+            <trans-unit id="XPT.passwordValidation.required.uppercase">
+                <source>Please use at least %u uppercase characters.</source>
+            </trans-unit>
+            <trans-unit id="XPT.passwordValidation.required.lowercase">
+                <source>Please use at least %u lowercase characters.</source>
+            </trans-unit>
+            <trans-unit id="XPT.passwordValidation.required.numbers">
+                <source>Please use at least %u numbers.</source>
+            </trans-unit>
+            <trans-unit id="XPT.passwordValidation.required.other">
+                <source>Please use at least %u other characters.</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
