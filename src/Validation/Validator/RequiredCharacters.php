@@ -82,14 +82,14 @@ final class RequiredCharacters implements PasswordValidatorInterface
 
     private function getRequiredOtherCharactersForRegexp(ValidationContext $context): string
     {
-        $configuration = $this->configuration->getConfiguration($context->getUserEntity());
-        $chars         = $configuration['other_chars'];
+        $config = $this->configuration->getConfiguration($context->getUserEntity());
+        $chars  = $config['other_chars'];
         if (!$chars) {
             return null;
         }
 
         $return = '';
-        foreach (str_split($chars) as $char) {
+        foreach (array_unique(preg_split('//u', $chars, null, PREG_SPLIT_NO_EMPTY)) as $char) {
             $return .= '\\' . $char;
         }
 
