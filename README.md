@@ -17,8 +17,8 @@ Choose the installation method that matches your workflow!
 
 ### Installation via Contao Manager
 
-Search for `terminal42/contao-oembed` in the Contao Manager and add it to your installation. Finally, update the 
-packages.
+Search for `terminal42/contao-password-validation` in the Contao Manager and add it to your installation. Finally,
+update the packages.
 
 ### Manual installation
 
@@ -67,7 +67,8 @@ Parameter | Purpose
 
 ### Password-change
 
-1. Create a "password-change" page with placed password-change module. Select this page as "password-change" page in the page root.
+1. Create a "password-change" page and place a password-change module on it. Select this page as password-change page in
+the page root.
 2. You can now force members to change their passwords by ticking the corresponding checkbox in the member edit-mask.
 
 
