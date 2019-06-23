@@ -1,10 +1,38 @@
 terminal42/contao-password-validation
 =====================================
 
+A Contao 4 bundle that validates user passwords against your password policy.
+
+
 ## Features
 
 - Validate a password against your organization policies
 - Force members to do a password-change
+
+
+## Installation
+
+Choose the installation method that matches your workflow!
+
+
+### Installation via Contao Manager
+
+Search for `terminal42/contao-oembed` in the Contao Manager and add it to your installation. Finally, update the 
+packages.
+
+### Manual installation
+
+Add a composer dependency for this bundle. Therefore, change in the project root and run the following:
+
+```bash
+composer require terminal42/contao-password-validation
+```
+
+Depending on your environment, the command can differ, i.e. starting with `php composer.phar …` if you do not have 
+composer installed globally.
+
+Then, update the database via the Contao install tool.
+
 
 ## Configuration
 
@@ -42,6 +70,7 @@ Parameter | Purpose
 1. Create a "password-change" page with placed password-change module. Select this page as "password-change" page in the page root.
 2. You can now force members to change their passwords by ticking the corresponding checkbox in the member edit-mask.
 
+
 ## Add your own password validator
 
 You can add your own validation rule, e.g. a dictionary check.
@@ -54,3 +83,8 @@ Create a class that implements `PasswordValidatorInterface`. Then, create and ta
     tags:
       - { name: terminal42_password_validation.validator, alias: dictionary }
 ```
+
+
+## License
+
+This bundle is released under the [MIT license](LICENSE)
