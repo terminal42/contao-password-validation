@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * password-validation extension for Contao Open Source CMS
+ *
+ * @copyright  Copyright (c) 2019, terminal42 gmbh
+ * @author     terminal42 gmbh <info@terminal42.ch>
+ * @license    MIT
+ * @link       http://github.com/terminal42/contao-password-validation
+ */
 
 namespace Terminal42\PasswordValidationBundle\Validation\Validator;
 
@@ -10,7 +18,6 @@ use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
 
 final class MinimumLength implements PasswordValidatorInterface
 {
-
     private $configuration;
 
     public function __construct(ValidationConfiguration $configuration)
@@ -32,7 +39,7 @@ final class MinimumLength implements PasswordValidatorInterface
 
         $password = $context->getPassword()->getString();
 
-        if (strlen($password) < $minimumLength) {
+        if (\strlen($password) < $minimumLength) {
             throw new ValidatorException(sprintf($this->translate('minLength'), $minimumLength));
         }
 

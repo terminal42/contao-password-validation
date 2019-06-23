@@ -1,8 +1,15 @@
 <?php
 
+/*
+ * password-validation extension for Contao Open Source CMS
+ *
+ * @copyright  Copyright (c) 2019, terminal42 gmbh
+ * @author     terminal42 gmbh <info@terminal42.ch>
+ * @license    MIT
+ * @link       http://github.com/terminal42/contao-password-validation
+ */
 
 namespace Terminal42\PasswordValidationBundle\Validation;
-
 
 /**
  * This class holds the configuration and parameters for validation.
@@ -21,7 +28,7 @@ final class ValidationConfiguration
 
     public function hasConfiguration(string $entityName): bool
     {
-        return array_key_exists($entityName, $this->configurations);
+        return \array_key_exists($entityName, $this->configurations);
     }
 
     public function getConfiguration(string $entityName): ?array

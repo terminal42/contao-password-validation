@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * password-validation extension for Contao Open Source CMS
+ *
+ * @copyright  Copyright (c) 2019, terminal42 gmbh
+ * @author     terminal42 gmbh <info@terminal42.ch>
+ * @license    MIT
+ * @link       http://github.com/terminal42/contao-password-validation
+ */
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
@@ -8,10 +16,8 @@ use Contao\User;
 use NotificationCenter\Model\Notification;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 
-
 final class InvalidAttemptsListener
 {
-
     private $configuration;
 
     public function __construct(ValidationConfiguration $configuration)
@@ -30,7 +36,7 @@ final class InvalidAttemptsListener
      */
     public function onCheckCredentials(string $username, string $password, User $user): bool
     {
-        if (null === $this->getMaximumInvalidAttempts(get_class($user))) {
+        if (null === $this->getMaximumInvalidAttempts(\get_class($user))) {
             return false;
         }
 
@@ -62,7 +68,7 @@ final class InvalidAttemptsListener
      */
     public function onPostLogin(User $user): void
     {
-        $user->loginCount = $this->getMaximumInvalidAttempts(get_class($user));
+        $user->loginCount = $this->getMaximumInvalidAttempts(\get_class($user));
         $user->save();
     }
 
@@ -87,7 +93,7 @@ final class InvalidAttemptsListener
 
         $tokens['username'] = $username;
         foreach ($user->getData() as $k => $v) {
-            $tokens['user_' . $k] = $v;
+            $tokens['user_'.$k] = $v;
         }
 
         $tokens['admin_email'] = $GLOBALS['TL_ADMIN_EMAIL'];

@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * password-validation extension for Contao Open Source CMS
+ *
+ * @copyright  Copyright (c) 2019, terminal42 gmbh
+ * @author     terminal42 gmbh <info@terminal42.ch>
+ * @license    MIT
+ * @link       http://github.com/terminal42/contao-password-validation
+ */
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
@@ -13,10 +21,8 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-
 final class ForcePasswordChangeFrontendListener
 {
-
     private $framework;
 
     private $tokenStorage;
@@ -28,8 +34,8 @@ final class ForcePasswordChangeFrontendListener
         TokenStorageInterface $tokenStorage,
         AuthenticationTrustResolverInterface $authenticationTrustResolver
     ) {
-        $this->framework                   = $framework;
-        $this->tokenStorage                = $tokenStorage;
+        $this->framework = $framework;
+        $this->tokenStorage = $tokenStorage;
         $this->authenticationTrustResolver = $authenticationTrustResolver;
     }
 
@@ -57,7 +63,7 @@ final class ForcePasswordChangeFrontendListener
         }
 
         /** @var PageModel $adapter */
-        $adapter  = $this->framework->getAdapter(PageModel::class);
+        $adapter = $this->framework->getAdapter(PageModel::class);
         $rootPage = $adapter->findByPk($page->rootId);
 
         if ($user->pwChange) {

@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * password-validation extension for Contao Open Source CMS
+ *
+ * @copyright  Copyright (c) 2019, terminal42 gmbh
+ * @author     terminal42 gmbh <info@terminal42.ch>
+ * @license    MIT
+ * @link       http://github.com/terminal42/contao-password-validation
+ */
 
 namespace Terminal42\PasswordValidationBundle\Validation\Validator;
 
@@ -8,7 +16,6 @@ use Contao\System;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
-
 
 final class RequiredCharacters implements PasswordValidatorInterface
 {
@@ -26,7 +33,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
         }
 
         $configuration = $this->configuration->getConfiguration($context->getUserEntity());
-        $require       = $configuration['require'];
+        $require = $configuration['require'];
         if (!$require) {
             return true;
         }
@@ -44,7 +51,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
             }
 
             if ($actual < $minimum) {
-                throw new ValidatorException(sprintf($this->translate('required.' . $category), $minimum));
+                throw new ValidatorException(sprintf($this->translate('required.'.$category), $minimum));
             }
         }
 
@@ -57,15 +64,15 @@ final class RequiredCharacters implements PasswordValidatorInterface
             case 'lowercase':
                 $uppercase = mb_strtoupper($string);
 
-                return strlen($uppercase) - similar_text($string, $uppercase);
+                return \strlen($uppercase) - similar_text($string, $uppercase);
 
             case 'uppercase':
                 $lowercase = mb_strtolower($string);
 
-                return strlen($lowercase) - similar_text($string, $lowercase);
+                return \strlen($lowercase) - similar_text($string, $lowercase);
 
             case 'numbers':
-                return strlen(preg_replace('/\D+/', '', $string));
+                return \strlen(preg_replace('/\D+/', '', $string));
 
             case 'other':
                 $chars = $this->getRequiredOtherCharactersForRegexp($context);
@@ -73,7 +80,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
                     return null;
                 }
 
-                return strlen(preg_replace('/[^' . $chars . ']+/', '', $string));
+                return \strlen(preg_replace('/[^'.$chars.']+/', '', $string));
 
             default:
                 return null;
@@ -83,14 +90,14 @@ final class RequiredCharacters implements PasswordValidatorInterface
     private function getRequiredOtherCharactersForRegexp(ValidationContext $context): string
     {
         $config = $this->configuration->getConfiguration($context->getUserEntity());
-        $chars  = $config['other_chars'];
+        $chars = $config['other_chars'];
         if (!$chars) {
             return null;
         }
 
         $return = '';
         foreach (array_unique(preg_split('//u', $chars, null, PREG_SPLIT_NO_EMPTY)) as $char) {
-            $return .= '\\' . $char;
+            $return .= '\\'.$char;
         }
 
         return $return;

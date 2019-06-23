@@ -18,7 +18,8 @@
     "terminal42/notification_center": "^1.3"
   },
   "require-dev": {
-    "contao/manager-plugin": "^2.7"
+    "contao/manager-plugin": "^2.7",
+    "friendsofphp/php-cs-fixer": "^2.12"
   },
   "extra": {
     "branch-alias": {

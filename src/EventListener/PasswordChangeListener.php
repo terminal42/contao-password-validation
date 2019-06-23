@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * password-validation extension for Contao Open Source CMS
+ *
+ * @copyright  Copyright (c) 2019, terminal42 gmbh
+ * @author     terminal42 gmbh <info@terminal42.ch>
+ * @license    MIT
+ * @link       http://github.com/terminal42/contao-password-validation
+ */
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
@@ -7,13 +15,11 @@ use Contao\User;
 use Terminal42\PasswordValidationBundle\Model\PasswordHistory;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 
-
 /**
  * This listener forces a password change for passwords being too old.
  */
 final class PasswordChangeListener
 {
-
     private $configuration;
 
     public function __construct(ValidationConfiguration $configuration)
@@ -27,7 +33,7 @@ final class PasswordChangeListener
             return;
         }
 
-        $passwordLog = PasswordHistory::findCurrentLog(get_class($user), $user->id);
+        $passwordLog = PasswordHistory::findCurrentLog(\get_class($user), $user->id);
         if (null === $passwordLog) {
             $this->forcePasswordChange($user);
         }
@@ -40,7 +46,7 @@ final class PasswordChangeListener
 
     private function getMaxDays(User $user): ?int
     {
-        $userEntity = get_class($user);
+        $userEntity = \get_class($user);
         if (false === $this->configuration->hasConfiguration($userEntity)) {
             return null;
         }
