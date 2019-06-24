@@ -11,6 +11,7 @@
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
+use Contao\BackendUser;
 use Contao\Message;
 use Contao\User;
 use NotificationCenter\Model\Notification;
@@ -37,6 +38,10 @@ final class InvalidAttemptsListener
     public function onCheckCredentials(string $username, string $password, User $user): bool
     {
         if (null === $this->getMaximumInvalidAttempts(\get_class($user))) {
+            return false;
+        }
+
+        if ($user instanceof BackendUser && $user->isAdmin) {
             return false;
         }
 
