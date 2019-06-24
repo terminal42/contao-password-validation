@@ -79,6 +79,12 @@ final class PasswordRegexpListener
                     $widget->addError($e->getMessage());
 
                     return true;
+                } catch (\Exception $e) {
+                    // Unhandled exceptions can be dangerous since the plaintext password is passed to this method.
+                    // The password would have been available in the stack trace.
+                    $widget->addError('An unexpected error occurred.');
+
+                    return true;
                 }
             }
         }
