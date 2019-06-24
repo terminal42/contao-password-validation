@@ -1,0 +1,28 @@
+services:
+  terminal42_password_validation.validator.password_history:
+    class: Terminal42\PasswordValidationBundle\Validation\Validator\PasswordHistory
+    tags:
+      - { name: terminal42_password_validation.validator, alias: password_history }
+    arguments:
+      ['@terminal42_password_validation.validator_configuration']
+
+  terminal42_password_validation.validator.minimum_length:
+    class: Terminal42\PasswordValidationBundle\Validation\Validator\MinimumLength
+    tags:
+      - { name: terminal42_password_validation.validator, alias: minimum_length }
+    arguments:
+      ['@terminal42_password_validation.validator_configuration']
+
+  terminal42_password_validation.validator.maximum_length:
+    class: Terminal42\PasswordValidationBundle\Validation\Validator\MaximumLength
+    tags:
+      - { name: terminal42_password_validation.validator, alias: maximum_length }
+    arguments:
+      ['@terminal42_password_validation.validator_configuration']
+
+  terminal42_password_validation.validator.required_characters:
+    class: Terminal42\PasswordValidationBundle\Validation\Validator\RequiredCharacters
+    tags:
+      - { name: terminal42_password_validation.validator, alias: required_characters }
+    arguments:
+      ['@terminal42_password_validation.validator_configuration']

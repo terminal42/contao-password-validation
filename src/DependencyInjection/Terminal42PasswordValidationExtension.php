@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * password-validation extension for Contao Open Source CMS
+ * Password Validation Bundle for Contao Open Source CMS.
  *
  * @copyright  Copyright (c) 2019, terminal42 gmbh
- * @author     terminal42 gmbh <info@terminal42.ch>
+ * @author     terminal42 <https://terminal42.ch>
  * @license    MIT
  * @link       http://github.com/terminal42/contao-password-validation
  */
@@ -18,16 +20,23 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 final class Terminal42PasswordValidationExtension extends Extension
 {
+    private static $files = [
+        'listeners.yml',
+        'services.yml',
+        'validators.yml',
+    ];
+
     /**
      * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration(new Configuration(), $configs);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
+        foreach (self::$files as $file) {
+            $loader->load($file);
+        }
 
         $definition = $container->getDefinition('terminal42_password_validation.validator_configuration');
         foreach ($config as $key => $value) {

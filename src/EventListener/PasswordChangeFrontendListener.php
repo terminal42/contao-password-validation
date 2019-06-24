@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * password-validation extension for Contao Open Source CMS
+ * Password Validation Bundle for Contao Open Source CMS.
  *
  * @copyright  Copyright (c) 2019, terminal42 gmbh
- * @author     terminal42 gmbh <info@terminal42.ch>
+ * @author     terminal42 <https://terminal42.ch>
  * @license    MIT
  * @link       http://github.com/terminal42/contao-password-validation
  */
@@ -21,7 +23,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-final class ForcePasswordChangeFrontendListener
+final class PasswordChangeFrontendListener
 {
     private $framework;
 
@@ -34,8 +36,8 @@ final class ForcePasswordChangeFrontendListener
         TokenStorageInterface $tokenStorage,
         AuthenticationTrustResolverInterface $authenticationTrustResolver
     ) {
-        $this->framework = $framework;
-        $this->tokenStorage = $tokenStorage;
+        $this->framework                   = $framework;
+        $this->tokenStorage                = $tokenStorage;
         $this->authenticationTrustResolver = $authenticationTrustResolver;
     }
 
@@ -49,9 +51,6 @@ final class ForcePasswordChangeFrontendListener
 
         $this->framework->initialize();
 
-        //$request = $event->getRequest();
-        //$page = $request->attributes->get('pageModel');
-
         $page = $GLOBALS['objPage'];
         if (!$page instanceof PageModel) {
             return;
@@ -63,11 +62,11 @@ final class ForcePasswordChangeFrontendListener
         }
 
         /** @var PageModel $adapter */
-        $adapter = $this->framework->getAdapter(PageModel::class);
+        $adapter  = $this->framework->getAdapter(PageModel::class);
         $rootPage = $adapter->findByPk($page->rootId);
 
         if ($user->pwChange) {
-            // Search for two-factor page
+            // Search for password-change page
             $pwChangePage = $adapter->findPublishedById($rootPage->pwChangePage);
 
             if (!$pwChangePage instanceof PageModel) {

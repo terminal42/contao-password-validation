@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * password-validation extension for Contao Open Source CMS
+ * Password Validation Bundle for Contao Open Source CMS.
  *
  * @copyright  Copyright (c) 2019, terminal42 gmbh
- * @author     terminal42 gmbh <info@terminal42.ch>
+ * @author     terminal42 <https://terminal42.ch>
  * @license    MIT
  * @link       http://github.com/terminal42/contao-password-validation
  */
@@ -19,7 +21,7 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('terminal42_password_validation');
+        $rootNode    = $treeBuilder->root('terminal42_password_validation');
 
         $rootNode
             ->useAttributeAsKey('entity')

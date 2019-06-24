@@ -3,18 +3,14 @@
 $date = date('Y');
 
 $header = <<<EOF
-password-validation extension for Contao Open Source CMS
+Password Validation Bundle for Contao Open Source CMS.
 
 @copyright  Copyright (c) $date, terminal42 gmbh
-@author     terminal42 gmbh <info@terminal42.ch>
+@author     terminal42 <https://terminal42.ch>
 @license    MIT
 @link       http://github.com/terminal42/contao-password-validation
 EOF;
 
-$finder = PhpCsFixer\Finder::create()
-    ->exclude('Resources')
-    ->in([__DIR__.'/src'])
-;
 
 return PhpCsFixer\Config::create()
     ->setRules([
@@ -24,10 +20,12 @@ return PhpCsFixer\Config::create()
         'align_multiline_comment' => true,
         'array_indentation' => true,
         'array_syntax' => ['syntax' => 'short'],
+        'binary_operator_spaces' => ['align_double_arrow' => true, 'align_equals' => true],
         'combine_consecutive_issets' => true,
         'combine_consecutive_unsets' => true,
         'comment_to_phpdoc' => true,
         'compact_nullable_typehint' => true,
+        'declare_strict_types' => true,
         'header_comment' => ['header' => $header],
         'heredoc_to_nowdoc' => true,
         'linebreak_after_opening_tag' => true,
@@ -51,7 +49,7 @@ return PhpCsFixer\Config::create()
         'strict_comparison' => true,
         'strict_param' => true,
     ])
-    ->setFinder($finder)
+    ->setFinder(PhpCsFixer\Finder::create()->in([__DIR__.'/src']))
     ->setRiskyAllowed(true)
     ->setUsingCache(false)
 ;

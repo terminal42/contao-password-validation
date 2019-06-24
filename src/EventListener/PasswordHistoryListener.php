@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * password-validation extension for Contao Open Source CMS
+ * Password Validation Bundle for Contao Open Source CMS.
  *
  * @copyright  Copyright (c) 2019, terminal42 gmbh
- * @author     terminal42 gmbh <info@terminal42.ch>
+ * @author     terminal42 <https://terminal42.ch>
  * @license    MIT
  * @link       http://github.com/terminal42/contao-password-validation
  */
@@ -55,8 +57,9 @@ final class PasswordHistoryListener
             $password = password_hash($password, PASSWORD_DEFAULT);
         }
 
-        PasswordHistory::addLog(FrontendUser::class, $member->id, $password);
-        PasswordHistory::clearLog(FrontendUser::class, $member->id, $historyLength);
+        $userId = (int) $member->id;
+        PasswordHistory::addLog(FrontendUser::class, $userId, $password);
+        PasswordHistory::clearLog(FrontendUser::class, $userId, $historyLength);
     }
 
     /**
@@ -84,8 +87,9 @@ final class PasswordHistoryListener
             return $password;
         }
 
-        PasswordHistory::addLog(BackendUser::class, $dc->id, $password);
-        PasswordHistory::clearLog(BackendUser::class, $dc->id, $historyLength);
+        $userId = (int) $dc->id;
+        PasswordHistory::addLog(BackendUser::class, $userId, $password);
+        PasswordHistory::clearLog(BackendUser::class, $userId, $historyLength);
 
         return $password;
     }

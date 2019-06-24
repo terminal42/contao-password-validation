@@ -1,0 +1,39 @@
+services:
+  terminal42_password_validation.listener.regexp:
+    class: Terminal42\PasswordValidationBundle\EventListener\PasswordRegexpListener
+    public: true
+    arguments:
+      ['@terminal42_password_validation.validator_manager', '@terminal42_password_validation.validator_configuration']
+
+  terminal42_password_validation.listener.history_log:
+    class: Terminal42\PasswordValidationBundle\EventListener\PasswordHistoryListener
+    public: true
+    arguments:
+      ['@terminal42_password_validation.validator_configuration']
+
+  terminal42_password_validation.listener.invalid_attempts:
+    class: Terminal42\PasswordValidationBundle\EventListener\InvalidAttemptsListener
+    public: true
+    arguments:
+      ['@terminal42_password_validation.validator_configuration']
+
+  terminal42_password_validation.listener.password_change:
+    class: Terminal42\PasswordValidationBundle\EventListener\PasswordChangeListener
+    public: true
+    arguments:
+      ['@terminal42_password_validation.validator_configuration']
+
+  terminal42_password_validation.listener.no_password_change_page_warning:
+    class: Terminal42\PasswordValidationBundle\EventListener\NoPwChangePageWarning
+    public: true
+    arguments:
+      ['@terminal42_password_validation.validator_configuration']
+
+  terminal42_password_validation.listener.password_change_frontend:
+    class: Terminal42\PasswordValidationBundle\EventListener\PasswordChangeFrontendListener
+    arguments:
+      - '@contao.framework'
+      - '@security.token_storage'
+      - '@security.authentication.trust_resolver'
+    tags:
+      - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

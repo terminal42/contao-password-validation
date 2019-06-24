@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * password-validation extension for Contao Open Source CMS
+ * Password Validation Bundle for Contao Open Source CMS.
  *
  * @copyright  Copyright (c) 2019, terminal42 gmbh
- * @author     terminal42 gmbh <info@terminal42.ch>
+ * @author     terminal42 <https://terminal42.ch>
  * @license    MIT
  * @link       http://github.com/terminal42/contao-password-validation
  */
@@ -45,8 +47,8 @@ final class InvalidAttemptsListener
             return false;
         }
 
-        // Check for <2 because the loginCount will be decreased after this hook call.
-        if ($user->loginCount < 2) {
+        // Check for <=1 because the loginCount will be decreased after this hook call.
+        if ($user->loginCount <= 1) {
             // Disable the account
             $user->disable = time();
             // Reset the login count as we do not want the default routine to lock the account.

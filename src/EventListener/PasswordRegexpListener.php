@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * password-validation extension for Contao Open Source CMS
+ * Password Validation Bundle for Contao Open Source CMS.
  *
  * @copyright  Copyright (c) 2019, terminal42 gmbh
- * @author     terminal42 gmbh <info@terminal42.ch>
+ * @author     terminal42 <https://terminal42.ch>
  * @license    MIT
  * @link       http://github.com/terminal42/contao-password-validation
  */
@@ -32,7 +34,7 @@ final class PasswordRegexpListener
     public function __construct(ValidatorManager $validatorManager, ValidationConfiguration $configuration)
     {
         $this->validatorManager = $validatorManager;
-        $this->configuration = $configuration;
+        $this->configuration    = $configuration;
     }
 
     public function onAddCustomRegexp(string $rgxp, $input, Widget $widget): bool
@@ -44,16 +46,16 @@ final class PasswordRegexpListener
         $dc = $widget->dataContainer;
         if (null !== $dc) {
             if ('tl_member' === $dc->table) {
-                $userId = (int) $dc->id;
+                $userId     = (int) $dc->id;
                 $userEntity = FrontendUser::class;
             } elseif ('tl_user' === $dc->table) {
-                $userId = (int) $dc->id;
+                $userId     = (int) $dc->id;
                 $userEntity = BackendUser::class;
             } else {
                 return true;
             }
         } elseif ('FE' === TL_MODE && FE_USER_LOGGED_IN) {
-            $userId = FrontendUser::getInstance()->id;
+            $userId     = FrontendUser::getInstance()->id;
             $userEntity = FrontendUser::class;
         } else {
             return true;
@@ -64,7 +66,7 @@ final class PasswordRegexpListener
         }
 
         $password = new HiddenString($input);
-        $context = new ValidationContext($userEntity, $userId, $password);
+        $context  = new ValidationContext($userEntity, $userId, $password);
         foreach ($this->validatorManager->getValidatorNames() as $validatorName) {
             if (null !== $validator = $this->validatorManager->getValidator($validatorName)) {
                 try {

@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * Password Validation Bundle for Contao Open Source CMS.
+ *
+ * @copyright  Copyright (c) 2019, terminal42 gmbh
+ * @author     terminal42 <https://terminal42.ch>
+ * @license    MIT
+ * @link       http://github.com/terminal42/contao-password-validation
+ */
+
 $GLOBALS['TL_DCA']['tl_page']['config']['onload_callback'][] =
     ['terminal42_password_validation.listener.no_password_change_page_warning', 'tlPageShowWarning'];
 
@@ -16,5 +27,5 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['pwChangePage'] = [
     'foreignKey' => 'tl_page.title',
     'eval'       => ['fieldType' => 'radio', 'tl_class' => 'clr'],
     'sql'        => "int(10) unsigned NOT NULL default '0'",
-    'relation'   => ['type' => 'hasOne', 'load' => 'eager']
+    'relation'   => ['type' => 'hasOne', 'load' => 'eager'],
 ];

@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * Password Validation Bundle for Contao Open Source CMS.
+ *
+ * @copyright  Copyright (c) 2019, terminal42 gmbh
+ * @author     terminal42 <https://terminal42.ch>
+ * @license    MIT
+ * @link       http://github.com/terminal42/contao-password-validation
+ */
+
 use Terminal42\PasswordValidationBundle\Model\PasswordHistory;
 
 $GLOBALS['TL_HOOKS']['addCustomRegexp'][]   =
@@ -7,7 +18,7 @@ $GLOBALS['TL_HOOKS']['addCustomRegexp'][]   =
 $GLOBALS['TL_HOOKS']['setNewPassword'][]    =
     ['terminal42_password_validation.listener.history_log', 'onSetNewPassword'];
 $GLOBALS['TL_HOOKS']['setNewPassword'][]    =
-    ['terminal42_password_validation.listener.force_password_change_frontend', 'onSetNewPassword'];
+    ['terminal42_password_validation.listener.password_change_frontend', 'onSetNewPassword'];
 $GLOBALS['TL_HOOKS']['checkCredentials'][]  =
     ['terminal42_password_validation.listener.invalid_attempts', 'onCheckCredentials'];
 $GLOBALS['TL_HOOKS']['postLogin'][]         =
