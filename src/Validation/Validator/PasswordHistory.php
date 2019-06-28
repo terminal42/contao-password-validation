@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Terminal42\PasswordValidationBundle\Validation\Validator;
 
 use Contao\System;
+use Contao\User;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Terminal42\PasswordValidationBundle\Model\PasswordHistory as PasswordHistoryModel;
 use Terminal42\PasswordValidationBundle\Validation\PasswordValidatorInterface;
@@ -24,9 +26,12 @@ final class PasswordHistory implements PasswordValidatorInterface
 {
     private $configuration;
 
-    public function __construct(ValidationConfiguration $configuration)
+    private $encoderFactory;
+
+    public function __construct(ValidationConfiguration $configuration, EncoderFactoryInterface $encoderFactory)
     {
-        $this->configuration = $configuration;
+        $this->configuration  = $configuration;
+        $this->encoderFactory = $encoderFactory;
     }
 
     public function validate(ValidationContext $context): bool
@@ -52,12 +57,21 @@ final class PasswordHistory implements PasswordValidatorInterface
 
         /** @var PasswordHistoryModel $log */
         foreach ($history as $log) {
-            if (password_verify($password, $log->password)) {
+            if ($this->verifyPassword((string) $log->password, $password)) {
                 throw new ValidatorException($this->translate('passwordHistory'));
             }
         }
 
         return true;
+    }
+
+    private function verifyPassword(string $hashedPassword, string $password)
+    {
+        if (version_compare(VERSION, '4.8', '>=')) {
+            return $this->encoderFactory->getEncoder(User::class)->isPasswordValid($hashedPassword, $password, null);
+        }
+
+        return password_verify($password, $hashedPassword);
     }
 
     private function translate(string $key)

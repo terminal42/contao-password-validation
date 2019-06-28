@@ -18,6 +18,8 @@ use Contao\Database\Result as DatabaseResult;
 use Contao\DataContainer;
 use Contao\FrontendUser;
 use Contao\MemberModel;
+use Contao\User;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Terminal42\PasswordValidationBundle\Model\PasswordHistory;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 
@@ -28,9 +30,12 @@ final class PasswordHistoryListener
 {
     private $configuration;
 
-    public function __construct(ValidationConfiguration $configuration)
+    private $encoderFactory;
+
+    public function __construct(ValidationConfiguration $configuration, EncoderFactoryInterface $encoderFactory)
     {
-        $this->configuration = $configuration;
+        $this->configuration  = $configuration;
+        $this->encoderFactory = $encoderFactory;
     }
 
     /**
@@ -52,11 +57,6 @@ final class PasswordHistoryListener
             return;
         }
 
-        if (0 !== strncmp($password, '$2y$', 4)) {
-            // This should never be the case.
-            $password = password_hash($password, PASSWORD_DEFAULT);
-        }
-
         $userId = (int) $member->id;
         PasswordHistory::addLog(FrontendUser::class, $userId, $password);
         PasswordHistory::clearLog(FrontendUser::class, $userId, $historyLength);
@@ -72,15 +72,14 @@ final class PasswordHistoryListener
      */
     public function onBackendSaveCallback(string $password, DataContainer $dc): string
     {
-        if (0 !== strncmp($password, '$2y$', 4)) {
-            $password = password_hash($password, PASSWORD_DEFAULT);
-        }
-
         if (false === $this->configuration->hasConfiguration(BackendUser::class)) {
             return $password;
         }
 
         $configuration = $this->configuration->getConfiguration(BackendUser::class);
+        if (!$this->isHashedPassword($password)) {
+            $password = $this->hashPassword($password);
+        }
 
         $historyLength = (int) $configuration['password_history'];
         if (0 === $historyLength) {
@@ -92,5 +91,19 @@ final class PasswordHistoryListener
         PasswordHistory::clearLog(BackendUser::class, $userId, $historyLength);
 
         return $password;
+    }
+
+    private function isHashedPassword(string $password): bool
+    {
+        return 0 !== password_get_info($password)['algo'];
+    }
+
+    private function hashPassword(string $password): string
+    {
+        if (version_compare(VERSION, '4.8', '>=')) {
+            return $this->encoderFactory->getEncoder(User::class)->encodePassword($password, null);
+        }
+
+        return password_hash($password, PASSWORD_DEFAULT);
     }
 }

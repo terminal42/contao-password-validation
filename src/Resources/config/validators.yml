@@ -4,7 +4,7 @@ services:
     tags:
       - { name: terminal42_password_validation.validator, alias: password_history }
     arguments:
-      ['@terminal42_password_validation.validator_configuration']
+      ['@terminal42_password_validation.validator_configuration', '@security.encoder_factory']
 
   terminal42_password_validation.validator.minimum_length:
     class: Terminal42\PasswordValidationBundle\Validation\Validator\MinimumLength
