@@ -99,7 +99,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
         }
 
         $return = '';
-        foreach (array_unique(preg_split('//u', $chars, null, PREG_SPLIT_NO_EMPTY)) as $char) {
+        foreach (array_unique(preg_split('//u', $chars, -1, PREG_SPLIT_NO_EMPTY)) as $char) {
             $return .= '\\'.$char;
         }
 
