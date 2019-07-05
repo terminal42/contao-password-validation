@@ -89,7 +89,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
                     return null;
                 }
 
-                return \strlen(preg_replace('/[^' . $chars . ']+/', '', $string));
+                return \strlen(preg_replace('/[^'.$chars.']+/', '', $string));
 
             default:
                 return null;
@@ -106,7 +106,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
 
         $return = '';
         foreach (array_unique(preg_split('//u', $chars, -1, PREG_SPLIT_NO_EMPTY)) as $char) {
-            $return .= '\\' . $char;
+            $return .= '\\'.$char;
         }
 
         return $return;
