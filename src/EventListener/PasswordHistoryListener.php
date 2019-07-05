@@ -18,7 +18,9 @@ use Contao\Database\Result as DatabaseResult;
 use Contao\DataContainer;
 use Contao\FrontendUser;
 use Contao\MemberModel;
+use Contao\StringUtil;
 use Contao\User;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Terminal42\PasswordValidationBundle\Model\PasswordHistory;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
@@ -32,10 +34,16 @@ final class PasswordHistoryListener
 
     private $encoderFactory;
 
-    public function __construct(ValidationConfiguration $configuration, EncoderFactoryInterface $encoderFactory)
-    {
+    private $connection;
+
+    public function __construct(
+        ValidationConfiguration $configuration,
+        EncoderFactoryInterface $encoderFactory,
+        Connection $connection
+    ) {
         $this->configuration  = $configuration;
         $this->encoderFactory = $encoderFactory;
+        $this->connection     = $connection;
     }
 
     /**
@@ -58,6 +66,29 @@ final class PasswordHistoryListener
         }
 
         $userId = (int) $member->id;
+
+        // When the password history is empty, also save the prior password
+        if (null === PasswordHistory::findCurrentLog(FrontendUser::class, $userId)) {
+            // Only way is to utilize the versions, because the hook is called post save
+            $version = $this->connection->createQueryBuilder()
+                ->select('data')
+                ->from('tl_version')
+                ->where('pid = :user_id')
+                ->andWhere('fromTable = :table')
+                ->orderBy('version', 'DESC')
+                ->setMaxResults(1)
+                ->setParameter('user_id', $userId)
+                ->setParameter('table', 'tl_member')
+                ->execute()
+                ->fetchColumn();
+
+            if (false !== $version) {
+                $data = StringUtil::deserialize($version);
+
+                PasswordHistory::addLog(FrontendUser::class, $userId, $data['password']);
+            }
+        }
+
         PasswordHistory::addLog(FrontendUser::class, $userId, $password);
         PasswordHistory::clearLog(FrontendUser::class, $userId, $historyLength);
     }
