@@ -21,7 +21,7 @@
                 <source>Please use at least %u numbers.</source>
             </trans-unit>
             <trans-unit id="XPT.passwordValidation.required.other">
-                <source>Please use at least %u other characters.</source>
+                <source>Please use at least %u characters out of the following: %s</source>
             </trans-unit>
         </body>
     </file>

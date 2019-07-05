@@ -54,7 +54,13 @@ final class RequiredCharacters implements PasswordValidatorInterface
             }
 
             if ($actual < $minimum) {
-                throw new ValidatorException(sprintf($this->translate('required.'.$category), $minimum));
+                if ('other' === $category) {
+                    throw new ValidatorException(
+                        sprintf($this->translate('required.other'), $minimum, $configuration['other_chars'])
+                    );
+                }
+
+                throw new ValidatorException(sprintf($this->translate('required.' . $category), $minimum));
             }
         }
 
@@ -83,7 +89,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
                     return null;
                 }
 
-                return \strlen(preg_replace('/[^'.$chars.']+/', '', $string));
+                return \strlen(preg_replace('/[^' . $chars . ']+/', '', $string));
 
             default:
                 return null;
@@ -99,8 +105,8 @@ final class RequiredCharacters implements PasswordValidatorInterface
         }
 
         $return = '';
-        foreach (array_unique(preg_split('//u', $chars, null, PREG_SPLIT_NO_EMPTY)) as $char) {
-            $return .= '\\'.$char;
+        foreach (array_unique(preg_split('//u', $chars, -1, PREG_SPLIT_NO_EMPTY)) as $char) {
+            $return .= '\\' . $char;
         }
 
         return $return;
