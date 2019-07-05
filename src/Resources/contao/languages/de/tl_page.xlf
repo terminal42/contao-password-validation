@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<xliff version="1.1">
+    <file datatype="php" original="src/Resources/contao/languages/de/tl_page.php" source-language="en" target-language="de">
+        <body>
+            <trans-unit id="tl_page.pwChangeLegend">
+                <source>Password change</source>
+                <target>Passwort-Änderung</target>
+            </trans-unit>
+            <trans-unit id="tl_page.pwChangePage.0">
+                <source>Password change page</source>
+                <target>"Passwort ändern"-Seite</target>
+            </trans-unit>
+            <trans-unit id="tl_page.pwChangePage.1">
+                <source>Redirect on this page to force the member to change their password.</source>
+                <target>Der Nutzende wird auf diese Seite weitergeleitet, wenn das Passwort geändert werden muss.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

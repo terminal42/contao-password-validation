@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<xliff version="1.1">
+    <file datatype="php" original="src/Resources/contao/languages/de/tl_member.php" source-language="en" target-language="de">
+        <body>
+            <trans-unit id="tl_member.pwChange.0">
+                <source>Password change required</source>
+                <target>Passwort-Änderung erforderlich</target>
+            </trans-unit>
+            <trans-unit id="tl_member.pwChange.1">
+                <source>Make the user change his password upon the next login.</source>
+                <target>Zwingt den Benutzer, sein Passwort bei der nächsten Anmeldung zu ändern.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
