@@ -55,7 +55,7 @@ final class PasswordRegexpListener
                 return true;
             }
         } elseif ('FE' === TL_MODE && FE_USER_LOGGED_IN) {
-            $userId     = FrontendUser::getInstance()->id;
+            $userId     = (int) FrontendUser::getInstance()->id;
             $userEntity = FrontendUser::class;
         } else {
             return true;
