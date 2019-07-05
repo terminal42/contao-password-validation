@@ -17,6 +17,8 @@ $GLOBALS['TL_HOOKS']['addCustomRegexp'][]   =
     ['terminal42_password_validation.listener.regexp', 'onAddCustomRegexp'];
 $GLOBALS['TL_HOOKS']['setNewPassword'][]    =
     ['terminal42_password_validation.listener.history_log', 'onSetNewPassword'];
+$GLOBALS['TL_HOOKS']['getPageLayout'][] =
+    ['terminal42_password_validation.listener.password_change_frontend', 'onGetPageLayout'];
 $GLOBALS['TL_HOOKS']['setNewPassword'][]    =
     ['terminal42_password_validation.listener.password_change_frontend', 'onSetNewPassword'];
 $GLOBALS['TL_HOOKS']['checkCredentials'][]  =

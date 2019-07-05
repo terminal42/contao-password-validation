@@ -14,12 +14,11 @@ declare(strict_types=1);
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
 use Contao\CoreBundle\Exception\PageNotFoundException;
+use Contao\CoreBundle\Exception\RedirectResponseException;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendUser;
 use Contao\MemberModel;
 use Contao\PageModel;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -41,20 +40,14 @@ final class PasswordChangeFrontendListener
         $this->authenticationTrustResolver = $authenticationTrustResolver;
     }
 
-    public function onKernelRequest(GetResponseEvent $event): void
+    public function onGetPageLayout(PageModel $page): void
     {
         $token = $this->tokenStorage->getToken();
-
         if (null === $token || $this->authenticationTrustResolver->isAnonymous($token)) {
             return;
         }
 
         $this->framework->initialize();
-
-        $page = $GLOBALS['objPage'];
-        if (!$page instanceof PageModel) {
-            return;
-        }
 
         $user = $token->getUser();
         if (!$user instanceof FrontendUser) {
@@ -65,24 +58,24 @@ final class PasswordChangeFrontendListener
         $adapter  = $this->framework->getAdapter(PageModel::class);
         $rootPage = $adapter->findByPk($page->rootId);
 
-        if ($user->pwChange) {
-            // Search for password-change page
-            $pwChangePage = $adapter->findPublishedById($rootPage->pwChangePage);
-
-            if (!$pwChangePage instanceof PageModel) {
-                throw new PageNotFoundException('No password-change page found.');
-            }
-
-            // Password-change page found, quit
-            if ($page->id === $pwChangePage->id) {
-                return;
-            }
-
-            // Redirect to password-change page
-            $event->setResponse(new RedirectResponse($pwChangePage->getAbsoluteUrl()));
-
+        if (!$user->pwChange) {
             return;
         }
+
+        // Search for password-change page
+        $pwChangePage = $adapter->findPublishedById($rootPage->pwChangePage);
+
+        if (!$pwChangePage instanceof PageModel) {
+            throw new PageNotFoundException('No password-change page found.');
+        }
+
+        // Password-change page found, quit
+        if ($page->id === $pwChangePage->id) {
+            return;
+        }
+
+        // Redirect to password-change page
+        throw new RedirectResponseException($pwChangePage->getAbsoluteUrl());
     }
 
     public function onSetNewPassword($member): void

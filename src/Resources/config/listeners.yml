@@ -35,5 +35,3 @@ services:
       - '@contao.framework'
       - '@security.token_storage'
       - '@security.authentication.trust_resolver'
-    tags:
-      - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
