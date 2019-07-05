@@ -23,6 +23,9 @@
             <trans-unit id="XPT.passwordValidation.required.other">
                 <source>Please use at least %u characters out of the following: %s</source>
             </trans-unit>
+            <trans-unit id="XPT.passwordValidation.required.summary">
+                <source>Please use at least %u uppercase letters, %u lowercase letters, %u numbers and %u special characters: %s</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
