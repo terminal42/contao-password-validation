@@ -1,8 +1,24 @@
 {
   "name": "terminal42/contao-password-validation",
   "type": "contao-bundle",
-  "description": "",
+  "description": "A Contao bundle that validates user passwords against your password policy",
+  "homepage": "https://github.com/terminal42/contao-password-validation",
+  "keywords": [
+    "contao",
+    "password",
+    "validation"
+  ],
   "license": "MIT",
+  "authors": [
+    {
+      "name": "terminal42 gmbh",
+      "homepage": "https://www.terminal42.ch"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/terminal42/contao-password-validation/issues",
+    "source": "https://github.com/terminal42/contao-password-validation"
+  },
   "autoload": {
     "psr-4": {
       "Terminal42\\PasswordValidationBundle\\": "src"
@@ -10,7 +26,7 @@
   },
   "require": {
     "php": "^7.1",
-    "contao/core-bundle": "4.4.*",
+    "contao/core-bundle": "^4.4",
     "paragonie/hidden-string": "^1.0",
     "symfony/config": "^3.3 || ^4.0",
     "symfony/dependency-injection": "^3.3 || ^4.0",
@@ -22,9 +38,6 @@
     "friendsofphp/php-cs-fixer": "^2.12"
   },
   "extra": {
-    "branch-alias": {
-      "dev-develop": "1.0.x-dev"
-    },
     "contao-manager-plugin": "Terminal42\\PasswordValidationBundle\\ContaoManager\\Plugin"
   }
 }
