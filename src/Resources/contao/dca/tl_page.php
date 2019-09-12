@@ -16,7 +16,7 @@ $GLOBALS['TL_DCA']['tl_page']['config']['onload_callback'][] =
 
 $GLOBALS['TL_DCA']['tl_page']['palettes']['root'] = str_replace(
     ';{publish_legend}',
-    ';{pwChangeLegend},pwChangePage;{publish_legend}',
+    ';{pwChangeLegend},pwChangePage,nc_account_disabled;{publish_legend}',
     $GLOBALS['TL_DCA']['tl_page']['palettes']['root']
 );
 
@@ -28,4 +28,19 @@ $GLOBALS['TL_DCA']['tl_page']['fields']['pwChangePage'] = [
     'eval'       => ['fieldType' => 'radio', 'tl_class' => 'clr'],
     'sql'        => "int(10) unsigned NOT NULL default '0'",
     'relation'   => ['type' => 'hasOne', 'load' => 'eager'],
+];
+
+$GLOBALS['TL_DCA']['tl_page']['fields']['nc_account_disabled'] = [
+    'label'            => &$GLOBALS['TL_LANG']['tl_page']['nc_account_disabled'],
+    'exclude'          => true,
+    'inputType'        => 'select',
+    'options_callback' => static function () {
+        return \Contao\System::getContainer()
+            ->get('database_connection')
+            ->executeQuery('SELECT id,title FROM tl_nc_notification WHERE type=\'account_disabled\' ORDER BY title')
+            ->fetchAll(PDO::FETCH_KEY_PAIR);
+    },
+    'eval'             => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50 clr'],
+    'sql'              => "int(10) unsigned NOT NULL default '0'",
+    'relation'         => ['type' => 'hasOne', 'load' => 'lazy', 'table' => 'tl_nc_notification'],
 ];

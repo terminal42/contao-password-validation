@@ -11,6 +11,12 @@
             <trans-unit id="tl_page.pwChangePage.1">
                 <source>Redirect on this page to force the member to change their password.</source>
             </trans-unit>
+            <trans-unit id="tl_page.nc_account_disabled.0">
+                <source>Account disabled notification</source>
+            </trans-unit>
+            <trans-unit id="tl_page.nc_account_disabled.1">
+                <source>Select the notification to trigger when a member account gets disabled.</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

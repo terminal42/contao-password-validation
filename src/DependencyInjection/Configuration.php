@@ -30,6 +30,7 @@ final class Configuration implements ConfigurationInterface
                 ->integerNode('min_length')->end()
                 ->integerNode('max_length')->end()
                 ->integerNode('invalid_attempts')->end()
+                ->integerNode('nc_account_disabled')->end()
                 ->integerNode('password_history')->end()
                 ->integerNode('change_days')->end()
                 ->scalarNode('other_chars')->end()

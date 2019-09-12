@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <xliff version="1.1">
-    <file datatype="php" original="src/Resources/contao/languages/de/tl_page.php" source-language="en" target-language="de">
+    <file datatype="php" original="src/Resources/contao/languages/de/tl_page.php" source-language="en"
+          target-language="de">
         <body>
             <trans-unit id="tl_page.pwChangeLegend">
                 <source>Password change</source>
@@ -12,7 +13,18 @@
             </trans-unit>
             <trans-unit id="tl_page.pwChangePage.1">
                 <source>Redirect on this page to force the member to change their password.</source>
-                <target>Der Nutzende wird auf diese Seite weitergeleitet, wenn das Passwort geändert werden muss.</target>
+                <target>Der Nutzende wird auf diese Seite weitergeleitet, wenn das Passwort geändert werden muss.
+                </target>
+            </trans-unit>
+            <trans-unit id="tl_page.nc_account_disabled.0">
+                <source>Account disabled notification</source>
+                <target>Benachrichtigung bei deaktivertem Account</target>
+            </trans-unit>
+            <trans-unit id="tl_page.nc_account_disabled.1">
+                <source>Select the notification to trigger when a member account gets disabled.</source>
+                <target>Wählen Sie die Benachrichtigung aus, die gesendet werden soll, sobald ein Mitgliedsaccount
+                    deaktiviert wird.
+                </target>
             </trans-unit>
         </body>
     </file>

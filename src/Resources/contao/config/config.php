@@ -17,7 +17,7 @@ $GLOBALS['TL_HOOKS']['addCustomRegexp'][]   =
     ['terminal42_password_validation.listener.regexp', 'onAddCustomRegexp'];
 $GLOBALS['TL_HOOKS']['setNewPassword'][]    =
     ['terminal42_password_validation.listener.history_log', 'onSetNewPassword'];
-$GLOBALS['TL_HOOKS']['getPageLayout'][] =
+$GLOBALS['TL_HOOKS']['getPageLayout'][]     =
     ['terminal42_password_validation.listener.password_change_frontend', 'onGetPageLayout'];
 $GLOBALS['TL_HOOKS']['setNewPassword'][]    =
     ['terminal42_password_validation.listener.password_change_frontend', 'onSetNewPassword'];
@@ -43,10 +43,12 @@ $GLOBALS['NOTIFICATION_CENTER']['NOTIFICATION_TYPE'] = array_merge(
                 ],
                 'email_text'           => [
                     'username',
+                    'user_class',
                     'user_*',
                 ],
                 'email_html'           => [
                     'username',
+                    'user_class',
                     'user_*',
                 ],
                 'email_sender_name'    => [

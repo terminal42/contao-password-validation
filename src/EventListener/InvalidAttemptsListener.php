@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
 use Contao\BackendUser;
+use Contao\FrontendUser;
 use Contao\Message;
+use Contao\PageModel;
 use Contao\User;
 use NotificationCenter\Model\Notification;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
@@ -57,10 +59,7 @@ final class InvalidAttemptsListener
 
             Message::addError($this->translate('accountDisabled'));
 
-            /** @var Notification $notification */
-            // TODO add field to tl_page (root pages) to configure the message. If none found or in the backend, fall back to this one.
-            $notification = Notification::findOneBy('type', 'account_disabled');
-            if (null !== $notification) {
+            if (null !== $notification = $this->getNotification($user)) {
                 $notification->send($this->getNotificationTokens($username, $user));
             }
         }
@@ -94,11 +93,31 @@ final class InvalidAttemptsListener
         return null;
     }
 
+    private function getNotification(User $user): ?Notification
+    {
+        if (($user instanceof FrontendUser) && null !== $rootPage = PageModel::findByPk($GLOBALS['objPage']->rootId)) {
+            $notification = Notification::findByPk($rootPage->nc_account_disabled);
+        }
+
+        $configuration = $this->configuration->getConfiguration(\get_class($user));
+        if (null === $notification && $notificationId = $configuration['nc_account_disabled']) {
+            $notification = Notification::findByPk($notificationId);
+        }
+
+        if (null === $notification) {
+            $notification = Notification::findOneBy('type', 'account_disabled');
+        }
+
+        return $notification;
+    }
+
     private function getNotificationTokens(string $username, User $user): array
     {
         $tokens = [];
 
-        $tokens['username'] = $username;
+        $tokens['user_class'] = \get_class($user);
+        $tokens['username']   = $username;
+
         foreach ($user->getData() as $k => $v) {
             $tokens['user_'.$k] = $v;
         }
