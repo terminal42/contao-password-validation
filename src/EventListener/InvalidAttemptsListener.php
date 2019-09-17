@@ -74,7 +74,11 @@ final class InvalidAttemptsListener
      */
     public function onPostLogin(User $user): void
     {
-        $user->loginCount = $this->getMaximumInvalidAttempts(\get_class($user));
+        if (null === $maximumAttempts = $this->getMaximumInvalidAttempts(\get_class($user))) {
+            return;
+        }
+
+        $user->loginCount = $maximumAttempts;
         $user->save();
     }
 
