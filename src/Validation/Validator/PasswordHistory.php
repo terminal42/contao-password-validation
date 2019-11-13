@@ -16,7 +16,7 @@ namespace Terminal42\PasswordValidationBundle\Validation\Validator;
 use Contao\System;
 use Contao\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Validator\Exception\ValidatorException;
+use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
 use Terminal42\PasswordValidationBundle\Model\PasswordHistory as PasswordHistoryModel;
 use Terminal42\PasswordValidationBundle\Validation\PasswordValidatorInterface;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
@@ -58,7 +58,7 @@ final class PasswordHistory implements PasswordValidatorInterface
         /** @var PasswordHistoryModel $log */
         foreach ($history as $log) {
             if ($this->verifyPassword((string) $log->password, $password)) {
-                throw new ValidatorException($this->translate('passwordHistory'));
+                throw new PasswordValidatorException($this->translate('passwordHistory'));
             }
         }
 

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Terminal42\PasswordValidationBundle\Validation\Validator;
 
 use Contao\System;
-use Symfony\Component\Validator\Exception\ValidatorException;
+use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
 use Terminal42\PasswordValidationBundle\Validation\PasswordValidatorInterface;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
@@ -43,7 +43,7 @@ final class MaximumLength implements PasswordValidatorInterface
         $password = $context->getPassword()->getString();
 
         if (\strlen($password) > $maximumLength) {
-            throw new ValidatorException(sprintf($this->translate('maxLength'), $maximumLength));
+            throw new PasswordValidatorException(sprintf($this->translate('maxLength'), $maximumLength));
         }
 
         return true;

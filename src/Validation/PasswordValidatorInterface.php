@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Terminal42\PasswordValidationBundle\Validation;
 
-use Symfony\Component\Validator\Exception\ValidatorException;
+use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
 
 interface PasswordValidatorInterface
 {
     /**
      * @param ValidationContext $context holds the password to verify, the user id and the like
      *
-     * @throws ValidatorException to decline the password and add a error message to the password widget
+     * @throws PasswordValidatorException to decline the password and add a error message to the password widget
      *
      * @return bool true to accept the password, false to decline the password
      */

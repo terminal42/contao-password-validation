@@ -31,6 +31,7 @@ services:
 
   terminal42_password_validation.listener.password_change_frontend:
     class: Terminal42\PasswordValidationBundle\EventListener\PasswordChangeFrontendListener
+    public: true
     arguments:
       - '@contao.framework'
       - '@security.token_storage'

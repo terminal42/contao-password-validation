@@ -15,7 +15,7 @@ namespace Terminal42\PasswordValidationBundle\Validation\Validator;
 
 use Contao\StringUtil;
 use Contao\System;
-use Symfony\Component\Validator\Exception\ValidatorException;
+use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
 use Terminal42\PasswordValidationBundle\Validation\PasswordValidatorInterface;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
@@ -56,18 +56,18 @@ final class RequiredCharacters implements PasswordValidatorInterface
 
             if ($actual < $minimum) {
                 if ('other' === $category) {
-                    $errors[] = new ValidatorException(
+                    $errors[] = new PasswordValidatorException(
                         sprintf($this->translate('required.other'), $minimum, $configuration['other_chars'])
                     );
                     continue;
                 }
 
-                $errors[] = new ValidatorException(sprintf($this->translate('required.'.$category), $minimum));
+                $errors[] = new PasswordValidatorException(sprintf($this->translate('required.'.$category), $minimum));
             }
         }
 
         if (\count($errors) > 1) {
-            throw new ValidatorException(
+            throw new PasswordValidatorException(
                 sprintf(
                     $this->translate('required.summary'),
                     $require['uppercase'],

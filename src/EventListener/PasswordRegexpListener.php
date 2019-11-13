@@ -17,7 +17,7 @@ use Contao\BackendUser;
 use Contao\FrontendUser;
 use Contao\Widget;
 use ParagonIE\HiddenString\HiddenString;
-use Symfony\Component\Validator\Exception\ValidatorException;
+use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
 use Terminal42\PasswordValidationBundle\Validation\ValidatorManager;
@@ -75,7 +75,7 @@ final class PasswordRegexpListener
 
                         return true;
                     }
-                } catch (ValidatorException $e) {
+                } catch (PasswordValidatorException $e) {
                     $widget->addError($e->getMessage());
 
                     return true;

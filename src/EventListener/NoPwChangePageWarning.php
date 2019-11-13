@@ -17,6 +17,7 @@ use Contao\FrontendUser;
 use Contao\Input;
 use Contao\MemberModel;
 use Contao\PageModel;
+use Doctrine\DBAL\DBALException;
 use Message;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 
@@ -43,7 +44,12 @@ final class NoPwChangePageWarning
         }
 
         if (!$needsPwChangePage) {
-            $members = MemberModel::findBy('pwChange', '1');
+            try {
+                $members = MemberModel::findBy('pwChange', '1');
+            } catch (DBALException $e) {
+                $members = null;
+            }
+
             if (null !== $members) {
                 $needsPwChangePage = true;
             }
