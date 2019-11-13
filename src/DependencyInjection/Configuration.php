@@ -43,6 +43,7 @@ final class Configuration implements ConfigurationInterface
                 ->end()
                 ->integerNode('password_history')->end()
                 ->integerNode('change_days')->end()
+                ->integerNode('haveibeenpwned')->end()
                 ->scalarNode('other_chars')->end()
                 ->arrayNode('require')
                     ->children()

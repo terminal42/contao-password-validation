@@ -26,3 +26,10 @@ services:
       - { name: terminal42_password_validation.validator, alias: required_characters }
     arguments:
       ['@terminal42_password_validation.validator_configuration']
+
+  terminal42_password_validation.validator.haveibeenpwned:
+    class: Terminal42\PasswordValidationBundle\Validation\Validator\HaveIBeenPwned
+    tags:
+      - { name: terminal42_password_validation.validator, alias: haveibeenpwned }
+    arguments:
+      ['@terminal42_password_validation.validator_configuration']
