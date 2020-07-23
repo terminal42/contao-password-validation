@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * Password Validation Bundle for Contao Open Source CMS.
  *
- * @copyright  Copyright (c) 2019, terminal42 gmbh
+ * @copyright  Copyright (c) 2020, terminal42 gmbh
  * @author     terminal42 <https://terminal42.ch>
  * @license    MIT
  * @link       http://github.com/terminal42/contao-password-validation
@@ -67,16 +67,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
         }
 
         if (\count($errors) > 1) {
-            throw new PasswordValidatorException(
-                sprintf(
-                    $this->translate('required.summary'),
-                    $require['uppercase'],
-                    $require['lowercase'],
-                    $require['numbers'],
-                    $require['other'],
-                    $configuration['other_chars']
-                )
-            );
+            throw new PasswordValidatorException(sprintf($this->translate('required.summary'), $require['uppercase'], $require['lowercase'], $require['numbers'], $require['other'], $configuration['other_chars']));
         }
 
         if (\count($errors) > 0) {

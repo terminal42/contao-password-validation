@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * Password Validation Bundle for Contao Open Source CMS.
  *
- * @copyright  Copyright (c) 2019, terminal42 gmbh
+ * @copyright  Copyright (c) 2020, terminal42 gmbh
  * @author     terminal42 <https://terminal42.ch>
  * @license    MIT
  * @link       http://github.com/terminal42/contao-password-validation
@@ -50,7 +50,6 @@ final class PasswordHistoryListener
      * This hook is triggered for frontend users exclusively (ModuleChangePassword and save_callback).
      *
      * @param MemberModel|DatabaseResult $member
-     * @param string                     $password
      */
     public function onSetNewPassword($member, string $password): void
     {
@@ -95,11 +94,6 @@ final class PasswordHistoryListener
 
     /**
      * This listener keeps track of the backend user's passwords.
-     *
-     * @param string        $password
-     * @param DataContainer $dc
-     *
-     * @return string
      */
     public function onBackendSaveCallback(string $password, DataContainer $dc): string
     {

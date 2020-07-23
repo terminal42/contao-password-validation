@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * Password Validation Bundle for Contao Open Source CMS.
  *
- * @copyright  Copyright (c) 2019, terminal42 gmbh
+ * @copyright  Copyright (c) 2020, terminal42 gmbh
  * @author     terminal42 <https://terminal42.ch>
  * @license    MIT
  * @link       http://github.com/terminal42/contao-password-validation
@@ -30,9 +30,6 @@ final class AddValidatorsCompilerPass implements CompilerPassInterface
      */
     private $componentManager;
 
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container): void
     {
         $this->container        = $container;
@@ -41,10 +38,6 @@ final class AddValidatorsCompilerPass implements CompilerPassInterface
         $this->addToManager('terminal42_password_validation.validator', 'addValidator');
     }
 
-    /**
-     * @param string $tagName
-     * @param string $method
-     */
     private function addToManager(string $tagName, string $method): void
     {
         foreach ($this->container->findTaggedServiceIds($tagName) as $id => $tags) {
