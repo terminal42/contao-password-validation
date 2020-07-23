@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
 use Contao\BackendUser;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\FrontendUser;
 use Contao\Message;
 use Contao\PageModel;
@@ -24,10 +25,12 @@ use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 final class InvalidAttemptsListener
 {
     private $configuration;
+    private $framework;
 
-    public function __construct(ValidationConfiguration $configuration)
+    public function __construct(ValidationConfiguration $configuration, ContaoFramework $framework)
     {
         $this->configuration = $configuration;
+        $this->framework     = $framework;
     }
 
     /**
@@ -99,7 +102,10 @@ final class InvalidAttemptsListener
 
     private function getNotification(User $user): ?Notification
     {
-        if (($user instanceof FrontendUser) && null !== $rootPage = PageModel::findByPk($GLOBALS['objPage']->rootId)) {
+        /** @var PageModel $adapter */
+        $adapter = $this->framework->getAdapter(PageModel::class);
+
+        if (($user instanceof FrontendUser) && null !== $rootPage = $adapter->findByPk($GLOBALS['objPage']->rootId)) {
             $notification = Notification::findByPk($rootPage->nc_account_disabled);
         }
 

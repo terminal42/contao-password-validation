@@ -15,7 +15,7 @@ services:
     class: Terminal42\PasswordValidationBundle\EventListener\InvalidAttemptsListener
     public: true
     arguments:
-      ['@terminal42_password_validation.validator_configuration']
+      ['@terminal42_password_validation.validator_configuration', '@contao.framework']
 
   terminal42_password_validation.listener.password_change:
     class: Terminal42\PasswordValidationBundle\EventListener\PasswordChangeListener
