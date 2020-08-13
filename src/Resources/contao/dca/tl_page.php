@@ -12,7 +12,7 @@ declare(strict_types=1);
  */
 
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
-use Contao\CoreBundle\DataContainer\PaletteNotFoundException;
+use Contao\CoreBundle\Exception\PaletteNotFoundException;
 
 $paletteManipulator = PaletteManipulator::create()
     ->addLegend('pwChangeLegend', 'publish_legend', PaletteManipulator::POSITION_BEFORE)
