@@ -102,17 +102,18 @@ final class PasswordHistoryListener
         }
 
         $configuration = $this->configuration->getConfiguration(BackendUser::class);
-        if (!$this->isHashedPassword($password)) {
-            $password = $this->hashPassword($password);
-        }
-
         $historyLength = (int) $configuration['password_history'];
         if (0 === $historyLength) {
             return $password;
         }
 
+        $hash = $password;
+        if (!$this->isHashedPassword($hash)) {
+            $hash = $this->hashPassword($hash);
+        }
+
         $userId = (int) $dc->id;
-        PasswordHistory::addLog(BackendUser::class, $userId, $password);
+        PasswordHistory::addLog(BackendUser::class, $userId, $hash);
         PasswordHistory::clearLog(BackendUser::class, $userId, $historyLength);
 
         return $password;
@@ -120,7 +121,7 @@ final class PasswordHistoryListener
 
     private function isHashedPassword(string $password): bool
     {
-        return 0 !== password_get_info($password)['algo'];
+        return (bool) password_get_info($password)['algo'];
     }
 
     private function hashPassword(string $password): string
