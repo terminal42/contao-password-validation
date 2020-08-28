@@ -26,6 +26,9 @@
             <trans-unit id="XPT.passwordValidation.required.summary">
                 <source>Please use at least %u uppercase letters, %u lowercase letters, %u numbers and %u special characters: %s</source>
             </trans-unit>
+            <trans-unit id="XPT.passwordValidation.haveibeenpwned">
+                <source>Oh no! Your password was found in a database of compromised passwords! Using a password that has been breached is extremely dangerous. Please choose a different password.</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

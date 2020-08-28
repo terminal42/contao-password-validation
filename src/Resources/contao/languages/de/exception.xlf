@@ -35,6 +35,10 @@
                 <source>Please use at least %u uppercase letters, %u lowercase letters, %u numbers and %u special characters: %s</source>
                 <target>Bitte verwenden Sie mindestens %u Großbuchstaben, %u Kleinbuchstaben, %u Ziffern und %u Sonderzeichen: %s</target>
             </trans-unit>
+            <trans-unit id="XPT.passwordValidation.haveibeenpwned">
+            <source>Oh no! Your password was found in a database of compromised passwords! Using a password that has been breached is extremely dangerous. Please choose a different password.</source>
+            <target>Oh nein! Ihr Passwort wurde in einer Datenbank mit veröffentlichten Passwörtern gefunden! Die Verwendung eines Passworts aus einem Datenleck ist äußerst gefährlich. Bitte wählen Sie ein anderes Passwort.</target>
+        </trans-unit>
         </body>
     </file>
 </xliff>

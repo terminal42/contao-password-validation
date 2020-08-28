@@ -33,6 +33,7 @@ final class Configuration implements ConfigurationInterface
                 ->integerNode('nc_account_disabled')->end()
                 ->integerNode('password_history')->end()
                 ->integerNode('change_days')->end()
+                ->integerNode('haveibeenpwned')->end()
                 ->scalarNode('other_chars')->end()
                 ->arrayNode('require')
                     ->children()

@@ -27,6 +27,7 @@
   "require": {
     "php": "^7.1",
     "contao/core-bundle": "^4.4",
+    "guzzlehttp/guzzle": "^6.2",
     "paragonie/hidden-string": "^1.0",
     "symfony/config": "^3.3 || ^4.0",
     "symfony/dependency-injection": "^3.3 || ^4.0",

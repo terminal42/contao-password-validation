@@ -55,8 +55,10 @@ terminal42_password_validation:
     invalid_attempts: 3
     password_history: 10
     change_days: 90
+    haveibeenpwned: 1
   Contao\BackendUser:
     min_length: 10
+    haveibeenpwned: 1
 ```
 
 Parameter | Purpose
@@ -64,6 +66,7 @@ Parameter | Purpose
 `invalid_attempts`: | Disable the user. Requires an admin to enable the account. Create a notification with type "account_disabled" which will be sent out to the admin and/or user.
 `password_history`: | Keep track of the latest `n` passwords, and force the users not to choose one of their recent passwords.
 `change_days`: | Ask the user to change their password after certain days.
+`haveibeenpwned`: | Check the user password against known data breaches reported to [';--have i been pwned?](https://haveibeenpwned.com/). The configuration allows you to specify an integer to define the [minimum number of data breaches](https://haveibeenpwned.com/API/v3#SearchingPwnedPasswordsByRange) the password needs to occur in to fail password validation.
 
 ### Password-change
 
