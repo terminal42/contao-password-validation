@@ -51,7 +51,7 @@ final class InvalidAttemptsListener
         // Check for <=1 because the loginCount will be decreased after this hook call.
         if ($user->loginCount <= 1) {
             // Disable the account
-            $user->disable = time();
+            $user->disable = '1';
             // Reset the login count as we do not want the default routine to lock the account.
             // No need to save as the user will be saved nonetheless.
             ++$user->loginCount;
