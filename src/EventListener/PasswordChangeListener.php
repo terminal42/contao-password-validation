@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
+use Contao\CoreBundle\ServiceAnnotation\Callback;
 use Contao\User;
 use Terminal42\PasswordValidationBundle\Model\PasswordHistory;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 
 /**
  * This listener forces a password change for passwords being too old.
+ *
+ * @Callback("postLogin")
  */
 final class PasswordChangeListener
 {
@@ -29,7 +32,7 @@ final class PasswordChangeListener
         $this->configuration = $configuration;
     }
 
-    public function onPostLogin(User $user): void
+    public function __invoke(User $user): void
     {
         if (null === $maxDays = $this->getMaxDays($user)) {
             return;

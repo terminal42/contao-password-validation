@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
 use Contao\BackendUser;
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\FrontendUser;
 use Contao\Widget;
 use ParagonIE\HiddenString\HiddenString;
@@ -24,6 +25,8 @@ use Terminal42\PasswordValidationBundle\Validation\ValidatorManager;
 
 /**
  * This listener validates the password input by providing a regexp.
+ *
+ * @Hook("addCustomRegexp")
  */
 final class PasswordRegexpListener
 {
@@ -37,7 +40,7 @@ final class PasswordRegexpListener
         $this->configuration    = $configuration;
     }
 
-    public function onAddCustomRegexp(string $rgxp, $input, Widget $widget): bool
+    public function __invoke(string $rgxp, $input, Widget $widget): bool
     {
         if ('terminal42_password_validation' !== $rgxp) {
             return false;

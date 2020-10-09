@@ -16,13 +16,14 @@ namespace Terminal42\PasswordValidationBundle\EventListener;
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Exception\RedirectResponseException;
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\FrontendUser;
-use Contao\MemberModel;
 use Contao\PageModel;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-final class PasswordChangeFrontendListener
+final class RedirectToPasswordChangePageListener
 {
     private $framework;
 
@@ -30,24 +31,38 @@ final class PasswordChangeFrontendListener
 
     private $authenticationTrustResolver;
 
+    private $scopeMatcher;
+
     public function __construct(
         ContaoFramework $framework,
         TokenStorageInterface $tokenStorage,
-        AuthenticationTrustResolverInterface $authenticationTrustResolver
+        AuthenticationTrustResolverInterface $authenticationTrustResolver,
+        ScopeMatcher $scopeMatcher
     ) {
         $this->framework                   = $framework;
         $this->tokenStorage                = $tokenStorage;
         $this->authenticationTrustResolver = $authenticationTrustResolver;
+        $this->scopeMatcher                = $scopeMatcher;
     }
 
-    public function onGetPageLayout(PageModel $page): void
+    public function __invoke(RequestEvent $event): void
     {
+        if (!$this->scopeMatcher->isFrontendMasterRequest($event)) {
+            return;
+        }
+
         $token = $this->tokenStorage->getToken();
         if (null === $token || $this->authenticationTrustResolver->isAnonymous($token)) {
             return;
         }
 
-        $this->framework->initialize();
+        $request = $event->getRequest();
+        $page = $request->attributes->get('pageModel');
+
+        // Check if actual page is available
+        if (!$page instanceof PageModel) {
+            return;
+        }
 
         $user = $token->getUser();
         if (!$user instanceof FrontendUser) {
@@ -76,15 +91,5 @@ final class PasswordChangeFrontendListener
 
         // Redirect to password-change page
         throw new RedirectResponseException($pwChangePage->getAbsoluteUrl());
-    }
-
-    public function onSetNewPassword($member): void
-    {
-        if ($member instanceof MemberModel) {
-            // We only want to reset "pwChange" if the user changed their password with the change-password module.
-            // If this hook is called within the save_callback (backend mask), $member is an instance of Database\Result.
-            $member->pwChange = '';
-            $member->save();
-        }
     }
 }

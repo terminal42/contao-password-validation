@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
+use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\FrontendUser;
 use Contao\Input;
 use Contao\MemberModel;
@@ -33,6 +35,9 @@ final class NoPwChangePageWarning
         $this->configuration = $configuration;
     }
 
+    /**
+     * @Hook("getSystemMessages")
+     */
     public function onGetSystemMessages(): string
     {
         $needsPwChangePage = false;
@@ -68,6 +73,9 @@ final class NoPwChangePageWarning
         return '';
     }
 
+    /**
+     * @Callback(table="tl_page", target="config.onload")
+     */
     public function tlPageShowWarning(): void
     {
         if (Input::get('act')) {

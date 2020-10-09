@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
 use Contao\BackendUser;
+use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Database\Result as DatabaseResult;
 use Contao\DataContainer;
 use Contao\FrontendUser;
@@ -48,6 +50,8 @@ final class PasswordHistoryListener
 
     /**
      * This hook is triggered for frontend users exclusively (ModuleChangePassword and save_callback).
+     *
+     * @Hook("setNewPassword")
      *
      * @param MemberModel|DatabaseResult $member
      */
@@ -94,6 +98,8 @@ final class PasswordHistoryListener
 
     /**
      * This listener keeps track of the backend user's passwords.
+     *
+     * @Callback(table="tl_user", target="fields.password.save")
      */
     public function onBackendSaveCallback(string $password, DataContainer $dc): string
     {
@@ -126,10 +132,6 @@ final class PasswordHistoryListener
 
     private function hashPassword(string $password): string
     {
-        if (version_compare(VERSION, '4.8', '>=')) {
-            return $this->encoderFactory->getEncoder(User::class)->encodePassword($password, null);
-        }
-
-        return password_hash($password, PASSWORD_DEFAULT);
+        return $this->encoderFactory->getEncoder(User::class)->encodePassword($password, null);
     }
 }
