@@ -25,9 +25,6 @@ try {
 } catch (PaletteNotFoundException $e) {
 }
 
-$GLOBALS['TL_DCA']['tl_page']['config']['onload_callback'][] =
-    ['terminal42_password_validation.listener.no_password_change_page_warning', 'tlPageShowWarning'];
-
 $GLOBALS['TL_DCA']['tl_page']['fields']['pwChangePage'] = [
     'label'      => &$GLOBALS['TL_LANG']['tl_page']['pwChangePage'],
     'exclude'    => true,
