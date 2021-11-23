@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\User;
 use Terminal42\PasswordValidationBundle\Model\PasswordHistory;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
@@ -21,7 +21,7 @@ use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 /**
  * This listener forces a password change for passwords being too old.
  *
- * @Callback("postLogin")
+ * @Hook("postLogin")
  */
 final class PasswordChangeListener
 {
