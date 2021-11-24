@@ -16,6 +16,8 @@ namespace Terminal42\PasswordValidationBundle\EventListener;
 use Contao\BackendUser;
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\FrontendUser;
+use Contao\ModulePersonalData;
+use Contao\ModuleRegistration;
 use Contao\Widget;
 use ParagonIE\HiddenString\HiddenString;
 use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
@@ -47,7 +49,16 @@ final class PasswordRegexpListener
         }
 
         $dc = $widget->dataContainer;
-        if (null !== $dc) {
+        if ($dc instanceof ModulePersonalData) {
+            $userId     = (int) FrontendUser::getInstance()->id;
+            $userEntity = FrontendUser::class;
+        } elseif ($dc instanceof ModuleRegistration) {
+            $userId     = null;
+            $userEntity = FrontendUser::class;
+        } elseif ('FE' === TL_MODE && FE_USER_LOGGED_IN) {
+            $userId     = (int) FrontendUser::getInstance()->id;
+            $userEntity = FrontendUser::class;
+        } elseif (null !== $dc) {
             if ('tl_member' === $dc->table) {
                 $userId     = (int) $dc->id;
                 $userEntity = FrontendUser::class;
@@ -57,9 +68,6 @@ final class PasswordRegexpListener
             } else {
                 return true;
             }
-        } elseif ('FE' === TL_MODE && FE_USER_LOGGED_IN) {
-            $userId     = (int) FrontendUser::getInstance()->id;
-            $userEntity = FrontendUser::class;
         } else {
             return true;
         }

@@ -26,7 +26,7 @@ final class ValidationContext
     private $userId;
     private $password;
 
-    public function __construct(string $userEntity, int $userId, HiddenString $password)
+    public function __construct(string $userEntity, ?int $userId, HiddenString $password)
     {
         $this->userId     = $userId;
         $this->password   = $password;
@@ -43,7 +43,7 @@ final class ValidationContext
         return BackendUser::class === $this->userEntity;
     }
 
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
