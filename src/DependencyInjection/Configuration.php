@@ -20,8 +20,14 @@ final class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('terminal42_password_validation');
+        $treeBuilder = new TreeBuilder('terminal42_password_validation');
+
+        // Keep compatibility with symfony/config < 4.2
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            $rootNode = $treeBuilder->root('terminal42_password_validation');
+        }
 
         $rootNode
             ->useAttributeAsKey('entity')
