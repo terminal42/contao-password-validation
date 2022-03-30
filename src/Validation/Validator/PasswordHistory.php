@@ -40,6 +40,10 @@ final class PasswordHistory implements PasswordValidatorInterface
             return true;
         }
 
+        if(null === $context->getUserId()) {
+            return true;
+        }
+        
         $configuration = $this->configuration->getConfiguration($context->getUserEntity());
         $historyLength = $configuration['password_history'];
         if (!$historyLength) {
