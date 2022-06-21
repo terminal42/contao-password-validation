@@ -40,7 +40,7 @@ final class PasswordHistory implements PasswordValidatorInterface
             return true;
         }
 
-        if(null === $context->getUserId()) {
+        if (null === $context->getUserId()) {
             return true;
         }
         
