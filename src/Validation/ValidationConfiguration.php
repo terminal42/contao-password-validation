@@ -18,7 +18,7 @@ namespace Terminal42\PasswordValidationBundle\Validation;
 final class ValidationConfiguration
 {
     /**
-     * @var array Configuration parameters in the format [Contao\FrontendUser => [ min_chars => 8, max_chars => 20 ]]
+     * @var array<string, array<string, mixed>> Configuration parameters in the format [Contao\FrontendUser => [ min_chars => 8, max_chars => 20 ]]
      */
     private $configurations = [];
 
