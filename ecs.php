@@ -6,7 +6,7 @@ use PhpCsFixer\Fixer\Comment\HeaderCommentFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 return static function (ECSConfig $ecsConfig): void {
-    $ecsConfig->paths([__DIR__ . '/src']);
+    $ecsConfig->paths([__DIR__ . '/src', __DIR__ . '/contao']);
     $ecsConfig->import(__DIR__.'/vendor/contao/easy-coding-standard/config/contao.php');
 
     $services = $ecsConfig->services();

@@ -32,7 +32,7 @@ final class Terminal42PasswordValidationExtension extends Extension
     {
         $config = $this->processConfiguration(new Configuration(), $configs);
 
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
 
         foreach (self::$files as $file) {
             $loader->load($file);

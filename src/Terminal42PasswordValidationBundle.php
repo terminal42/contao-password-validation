@@ -18,6 +18,11 @@ use Terminal42\PasswordValidationBundle\DependencyInjection\Compiler\AddValidato
 
 final class Terminal42PasswordValidationBundle extends Bundle
 {
+    public function getPath(): string
+    {
+        return \dirname(__DIR__);
+    }
+
     public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(
