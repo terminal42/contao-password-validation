@@ -10,8 +10,4 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Terminal42\PasswordValidationBundle\Exception;
-
-class PasswordValidatorException extends \Exception
-{
-}
+$GLOBALS['TL_DCA']['tl_user']['fields']['password']['eval']['rgxp'] = 'terminal42_password_validation';

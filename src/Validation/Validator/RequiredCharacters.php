@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 /*
- * Password Validation Bundle for Contao Open Source CMS.
+ * This file is part of terminal42/contao-password-validation.
  *
- * @copyright  Copyright (c) 2021, terminal42 gmbh
- * @author     terminal42 <https://terminal42.ch>
- * @license    MIT
- * @link       http://github.com/terminal42/contao-password-validation
+ * (c) terminal42 gmbh <https://terminal42.ch>
+ *
+ * @license MIT
  */
 
 namespace Terminal42\PasswordValidationBundle\Validation\Validator;
@@ -36,7 +35,8 @@ final class RequiredCharacters implements PasswordValidatorInterface
         }
 
         $configuration = $this->configuration->getConfiguration($context->getUserEntity());
-        $require       = $configuration['require'];
+        $require = $configuration['require'];
+
         if (!$require) {
             return true;
         }
@@ -44,12 +44,14 @@ final class RequiredCharacters implements PasswordValidatorInterface
         $password = $context->getPassword()->getString();
 
         $errors = [];
+
         foreach ($require as $category => $minimum) {
             if (!$minimum) {
                 continue;
             }
 
             $actual = $this->countRequirement($category, $password, $context);
+
             if (null === $actual) {
                 continue;
             }
@@ -95,6 +97,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
 
             case 'other':
                 $chars = $this->getRequiredOtherCharactersForRegexp($context);
+
                 if (null === $chars) {
                     return null;
                 }
@@ -109,13 +112,15 @@ final class RequiredCharacters implements PasswordValidatorInterface
     private function getRequiredOtherCharactersForRegexp(ValidationContext $context): ?string
     {
         $config = $this->configuration->getConfiguration($context->getUserEntity());
-        $chars  = $config['other_chars'];
+        $chars = $config['other_chars'];
+
         if (!$chars) {
             return null;
         }
 
         $return = '';
-        foreach (array_unique(preg_split('//u', $chars, -1, \PREG_SPLIT_NO_EMPTY)) as $char) {
+
+        foreach (array_unique(preg_split('//u', $chars, -1, PREG_SPLIT_NO_EMPTY)) as $char) {
             $return .= '\\'.$char;
         }
 

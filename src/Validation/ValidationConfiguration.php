@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 /*
- * Password Validation Bundle for Contao Open Source CMS.
+ * This file is part of terminal42/contao-password-validation.
  *
- * @copyright  Copyright (c) 2021, terminal42 gmbh
- * @author     terminal42 <https://terminal42.ch>
- * @license    MIT
- * @link       http://github.com/terminal42/contao-password-validation
+ * (c) terminal42 gmbh <https://terminal42.ch>
+ *
+ * @license MIT
  */
 
 namespace Terminal42\PasswordValidationBundle\Validation;
@@ -19,7 +18,7 @@ namespace Terminal42\PasswordValidationBundle\Validation;
 final class ValidationConfiguration
 {
     /**
-     * @var array Configuration parameters in the format [Contao\FrontendUser => [ min_chars => 8, max_chars => 20 ]]
+     * @var array<string, array<string, mixed>> Configuration parameters in the format [Contao\FrontendUser => [ min_chars => 8, max_chars => 20 ]]
      */
     private $configurations = [];
 

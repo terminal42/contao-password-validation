@@ -10,8 +10,6 @@ declare(strict_types=1);
  * @license MIT
  */
 
-namespace Terminal42\PasswordValidationBundle\Exception;
+use Terminal42\PasswordValidationBundle\Model\PasswordHistory;
 
-class PasswordValidatorException extends \Exception
-{
-}
+$GLOBALS['TL_MODELS']['tl_password_history'] = PasswordHistory::class;

@@ -3,21 +3,20 @@
 declare(strict_types=1);
 
 /*
- * Password Validation Bundle for Contao Open Source CMS.
+ * This file is part of terminal42/contao-password-validation.
  *
- * @copyright  Copyright (c) 2021, terminal42 gmbh
- * @author     terminal42 <https://terminal42.ch>
- * @license    MIT
- * @link       http://github.com/terminal42/contao-password-validation
+ * (c) terminal42 gmbh <https://terminal42.ch>
+ *
+ * @license MIT
  */
 
 $GLOBALS['TL_DCA']['tl_password_history'] = [
     // Config
     'config' => [
         'notDeletable' => true,
-        'sql'          => [
+        'sql' => [
             'keys' => [
-                'id'                  => 'primary',
+                'id' => 'primary',
                 'user_id,user_entity' => 'index',
             ],
         ],
@@ -25,19 +24,19 @@ $GLOBALS['TL_DCA']['tl_password_history'] = [
 
     // Fields
     'fields' => [
-        'id'          => [
+        'id' => [
             'sql' => 'int(10) unsigned NOT NULL auto_increment',
         ],
-        'tstamp'      => [
+        'tstamp' => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
-        'user_id'     => [
+        'user_id' => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
         'user_entity' => [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
-        'password'    => [
+        'password' => [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
     ],

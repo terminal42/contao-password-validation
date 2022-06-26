@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 /*
- * Password Validation Bundle for Contao Open Source CMS.
+ * This file is part of terminal42/contao-password-validation.
  *
- * @copyright  Copyright (c) 2021, terminal42 gmbh
- * @author     terminal42 <https://terminal42.ch>
- * @license    MIT
- * @link       http://github.com/terminal42/contao-password-validation
+ * (c) terminal42 gmbh <https://terminal42.ch>
+ *
+ * @license MIT
  */
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
@@ -18,9 +17,9 @@ use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\FrontendUser;
 use Contao\Input;
 use Contao\MemberModel;
+use Contao\Message;
 use Contao\PageModel;
 use Doctrine\DBAL\DBALException;
-use Message;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 
 /**
@@ -41,8 +40,10 @@ final class NoPwChangePageWarning
     public function onGetSystemMessages(): string
     {
         $needsPwChangePage = false;
+
         if ($this->configuration->hasConfiguration(FrontendUser::class)) {
             $configuration = $this->configuration->getConfiguration(FrontendUser::class);
+
             if ($configuration['change_days']) {
                 $needsPwChangePage = true;
             }

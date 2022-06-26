@@ -28,14 +28,14 @@
     "php": ">=7.1",
     "contao/core-bundle": "^4.9",
     "paragonie/hidden-string": "^1.0",
-    "symfony/config": "^4.0 || ^5.0",
+    "symfony/config": "^4.2 || ^5.0",
     "symfony/dependency-injection": "^4.0 || ^5.0",
     "symfony/http-client": "^4.0 || ^5.0",
     "symfony/http-kernel": "^4.0 || ^5.0"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.7",
-    "friendsofphp/php-cs-fixer": "^2.12"
+    "contao/easy-coding-standard": "^4.0"
   },
   "extra": {
     "contao-manager-plugin": "Terminal42\\PasswordValidationBundle\\ContaoManager\\Plugin"
@@ -43,7 +43,8 @@
   "config": {
     "allow-plugins": {
       "contao-components/installer": true,
-      "contao/manager-plugin": true
+      "contao/manager-plugin": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   }
 }

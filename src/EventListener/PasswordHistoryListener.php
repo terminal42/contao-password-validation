@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 /*
- * Password Validation Bundle for Contao Open Source CMS.
+ * This file is part of terminal42/contao-password-validation.
  *
- * @copyright  Copyright (c) 2021, terminal42 gmbh
- * @author     terminal42 <https://terminal42.ch>
- * @license    MIT
- * @link       http://github.com/terminal42/contao-password-validation
+ * (c) terminal42 gmbh <https://terminal42.ch>
+ *
+ * @license MIT
  */
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
@@ -38,14 +37,11 @@ final class PasswordHistoryListener
 
     private $connection;
 
-    public function __construct(
-        ValidationConfiguration $configuration,
-        EncoderFactoryInterface $encoderFactory,
-        Connection $connection
-    ) {
-        $this->configuration  = $configuration;
+    public function __construct(ValidationConfiguration $configuration, EncoderFactoryInterface $encoderFactory, Connection $connection)
+    {
+        $this->configuration = $configuration;
         $this->encoderFactory = $encoderFactory;
-        $this->connection     = $connection;
+        $this->connection = $connection;
     }
 
     /**
@@ -64,6 +60,7 @@ final class PasswordHistoryListener
         $configuration = $this->configuration->getConfiguration(FrontendUser::class);
 
         $historyLength = (int) $configuration['password_history'];
+
         if (0 === $historyLength) {
             return;
         }
@@ -83,7 +80,8 @@ final class PasswordHistoryListener
                 ->setParameter('user_id', $userId)
                 ->setParameter('table', 'tl_member')
                 ->execute()
-                ->fetchColumn();
+                ->fetchColumn()
+            ;
 
             if (false !== $version) {
                 $data = StringUtil::deserialize($version);
@@ -109,11 +107,13 @@ final class PasswordHistoryListener
 
         $configuration = $this->configuration->getConfiguration(BackendUser::class);
         $historyLength = (int) $configuration['password_history'];
+
         if (0 === $historyLength) {
             return $password;
         }
 
         $hash = $password;
+
         if (!$this->isHashedPassword($hash)) {
             $hash = $this->hashPassword($hash);
         }
