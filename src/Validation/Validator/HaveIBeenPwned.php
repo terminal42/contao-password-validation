@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Terminal42\PasswordValidationBundle\Validation\Validator;
 
 use Contao\System;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
+use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
 use Terminal42\PasswordValidationBundle\Validation\PasswordValidatorInterface;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
@@ -24,10 +24,12 @@ use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
 final class HaveIBeenPwned implements PasswordValidatorInterface
 {
     private $configuration;
+    private $client;
 
-    public function __construct(ValidationConfiguration $configuration)
+    public function __construct(ValidationConfiguration $configuration, HttpClientInterface $client)
     {
         $this->configuration = $configuration;
+        $this->client = $client;
     }
 
     public function validate(ValidationContext $context): bool
@@ -45,16 +47,15 @@ final class HaveIBeenPwned implements PasswordValidatorInterface
         $password = $context->getPassword()->getString();
         $hash     = strtoupper(sha1($password));
         $hash05   = substr($hash, 0, 5);
-        $client   = new Client();
 
         try {
-            $res = $client->request('GET', 'https://api.pwnedpasswords.com/range/'.$hash05);
-        } catch (GuzzleException $e) {
+            $response = $this->client->request('GET', 'https://api.pwnedpasswords.com/range/'.$hash05)->getContent();
+        } catch (HttpExceptionInterface $e) {
             return true;
         }
 
         $breaches = array_reduce(
-            preg_split("/\r\n|\n|\r/", (string) $res->getBody()),
+            preg_split("/\r\n|\n|\r/", $response),
             static function ($carry, $item) use ($hash05) {
                 [$hash35, $quantity] = explode(':', $item);
                 $carry[$hash05.$hash35] = $quantity;
