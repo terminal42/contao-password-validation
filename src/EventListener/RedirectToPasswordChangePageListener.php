@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 /*
- * Password Validation Bundle for Contao Open Source CMS.
+ * This file is part of terminal42/contao-password-validation.
  *
- * @copyright  Copyright (c) 2021, terminal42 gmbh
- * @author     terminal42 <https://terminal42.ch>
- * @license    MIT
- * @link       http://github.com/terminal42/contao-password-validation
+ * (c) terminal42 gmbh <https://terminal42.ch>
+ *
+ * @license MIT
  */
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
@@ -33,16 +32,12 @@ final class RedirectToPasswordChangePageListener
 
     private $scopeMatcher;
 
-    public function __construct(
-        ContaoFramework $framework,
-        TokenStorageInterface $tokenStorage,
-        AuthenticationTrustResolverInterface $authenticationTrustResolver,
-        ScopeMatcher $scopeMatcher
-    ) {
-        $this->framework                   = $framework;
-        $this->tokenStorage                = $tokenStorage;
+    public function __construct(ContaoFramework $framework, TokenStorageInterface $tokenStorage, AuthenticationTrustResolverInterface $authenticationTrustResolver, ScopeMatcher $scopeMatcher)
+    {
+        $this->framework = $framework;
+        $this->tokenStorage = $tokenStorage;
         $this->authenticationTrustResolver = $authenticationTrustResolver;
-        $this->scopeMatcher                = $scopeMatcher;
+        $this->scopeMatcher = $scopeMatcher;
     }
 
     public function __invoke(RequestEvent $event): void
@@ -52,12 +47,13 @@ final class RedirectToPasswordChangePageListener
         }
 
         $token = $this->tokenStorage->getToken();
+
         if (null === $token || $this->authenticationTrustResolver->isAnonymous($token)) {
             return;
         }
 
         $request = $event->getRequest();
-        $page    = $request->attributes->get('pageModel');
+        $page = $request->attributes->get('pageModel');
 
         // Check if actual page is available
         if (!$page instanceof PageModel) {
@@ -65,12 +61,13 @@ final class RedirectToPasswordChangePageListener
         }
 
         $user = $token->getUser();
+
         if (!$user instanceof FrontendUser) {
             return;
         }
 
         /** @var PageModel $adapter */
-        $adapter  = $this->framework->getAdapter(PageModel::class);
+        $adapter = $this->framework->getAdapter(PageModel::class);
         $rootPage = $adapter->findByPk($page->rootId);
 
         if (!$user->pwChange) {

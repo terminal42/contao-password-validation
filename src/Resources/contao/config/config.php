@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 /*
- * Password Validation Bundle for Contao Open Source CMS.
+ * This file is part of terminal42/contao-password-validation.
  *
- * @copyright  Copyright (c) 2021, terminal42 gmbh
- * @author     terminal42 <https://terminal42.ch>
- * @license    MIT
- * @link       http://github.com/terminal42/contao-password-validation
+ * (c) terminal42 gmbh <https://terminal42.ch>
+ *
+ * @license MIT
  */
 
 use Terminal42\PasswordValidationBundle\Model\PasswordHistory;

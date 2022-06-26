@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 /*
- * Password Validation Bundle for Contao Open Source CMS.
+ * This file is part of terminal42/contao-password-validation.
  *
- * @copyright  Copyright (c) 2019, terminal42 gmbh
- * @author     terminal42 <https://terminal42.ch>
- * @license    MIT
- * @link       http://github.com/terminal42/contao-password-validation
+ * (c) terminal42 gmbh <https://terminal42.ch>
+ *
+ * @license MIT
  */
 
 namespace Terminal42\PasswordValidationBundle\Validation\Validator;
@@ -38,15 +37,16 @@ final class HaveIBeenPwned implements PasswordValidatorInterface
             return true;
         }
 
-        $configuration   = $this->configuration->getConfiguration($context->getUserEntity());
+        $configuration = $this->configuration->getConfiguration($context->getUserEntity());
         $minDataBreaches = $configuration['haveibeenpwned'];
+
         if (!$minDataBreaches) {
             return true;
         }
 
         $password = $context->getPassword()->getString();
-        $hash     = strtoupper(sha1($password));
-        $hash05   = substr($hash, 0, 5);
+        $hash = strtoupper(sha1($password));
+        $hash05 = substr($hash, 0, 5);
 
         try {
             $response = $this->client->request('GET', 'https://api.pwnedpasswords.com/range/'.$hash05)->getContent();

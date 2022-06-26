@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 /*
- * Password Validation Bundle for Contao Open Source CMS.
+ * This file is part of terminal42/contao-password-validation.
  *
- * @copyright  Copyright (c) 2021, terminal42 gmbh
- * @author     terminal42 <https://terminal42.ch>
- * @license    MIT
- * @link       http://github.com/terminal42/contao-password-validation
+ * (c) terminal42 gmbh <https://terminal42.ch>
+ *
+ * @license MIT
  */
 
 namespace Terminal42\PasswordValidationBundle\Validation\Validator;
@@ -30,7 +29,7 @@ final class PasswordHistory implements PasswordValidatorInterface
 
     public function __construct(ValidationConfiguration $configuration, EncoderFactoryInterface $encoderFactory)
     {
-        $this->configuration  = $configuration;
+        $this->configuration = $configuration;
         $this->encoderFactory = $encoderFactory;
     }
 
@@ -43,18 +42,20 @@ final class PasswordHistory implements PasswordValidatorInterface
         if (null === $context->getUserId()) {
             return true;
         }
-        
+
         $configuration = $this->configuration->getConfiguration($context->getUserEntity());
         $historyLength = $configuration['password_history'];
+
         if (!$historyLength) {
             return true;
         }
 
         $userEntity = $context->getUserEntity();
-        $userId     = $context->getUserId();
-        $password   = $context->getPassword()->getString();
+        $userId = $context->getUserId();
+        $password = $context->getPassword()->getString();
 
         $history = PasswordHistoryModel::findHistory($userEntity, $userId, $historyLength);
+
         if (null === $history) {
             return true;
         }

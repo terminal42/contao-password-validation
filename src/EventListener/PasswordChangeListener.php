@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 /*
- * Password Validation Bundle for Contao Open Source CMS.
+ * This file is part of terminal42/contao-password-validation.
  *
- * @copyright  Copyright (c) 2021, terminal42 gmbh
- * @author     terminal42 <https://terminal42.ch>
- * @license    MIT
- * @link       http://github.com/terminal42/contao-password-validation
+ * (c) terminal42 gmbh <https://terminal42.ch>
+ *
+ * @license MIT
  */
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
@@ -38,13 +37,15 @@ final class PasswordChangeListener
             return;
         }
 
-        $userId      = (int) $user->id;
+        $userId = (int) $user->id;
         $passwordLog = PasswordHistory::findCurrentLog(\get_class($user), $userId);
+
         if (null === $passwordLog) {
             $this->forcePasswordChange($user);
         }
 
         $maxAge = strtotime("-$maxDays days");
+
         if ($passwordLog->tstamp < $maxAge) {
             $this->forcePasswordChange($user);
         }
@@ -53,6 +54,7 @@ final class PasswordChangeListener
     private function getMaxDays(User $user): ?int
     {
         $userEntity = \get_class($user);
+
         if (false === $this->configuration->hasConfiguration($userEntity)) {
             return null;
         }
@@ -60,6 +62,7 @@ final class PasswordChangeListener
         $configuration = $this->configuration->getConfiguration($userEntity);
 
         $maxDays = $configuration['change_days'];
+
         if (!$maxDays) {
             return null;
         }
