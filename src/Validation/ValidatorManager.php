@@ -22,6 +22,11 @@ final class ValidatorManager
      */
     private $validators = [];
 
+    public function __construct(iterable $validators)
+    {
+        $this->validators = $validators instanceof \Traversable ? iterator_to_array($validators) : $validators;
+    }
+
     public function addValidator(PasswordValidatorInterface $validator, string $alias): void
     {
         $this->validators[$alias] = $validator;
