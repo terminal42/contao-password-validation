@@ -80,7 +80,7 @@ final class PasswordHistoryListener
                 ->setParameter('user_id', $userId)
                 ->setParameter('table', 'tl_member')
                 ->execute()
-                ->fetchColumn()
+                ->fetchOne()
             ;
 
             if (false !== $version) {
