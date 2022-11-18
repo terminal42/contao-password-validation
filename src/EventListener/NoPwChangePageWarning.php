@@ -43,7 +43,7 @@ final class NoPwChangePageWarning
         if ($this->configuration->hasConfiguration(FrontendUser::class)) {
             $configuration = $this->configuration->getConfiguration(FrontendUser::class);
 
-            if ($configuration['change_days']) {
+            if ($configuration['change_days'] ?? null) {
                 $needsPwChangePage = true;
             }
         }

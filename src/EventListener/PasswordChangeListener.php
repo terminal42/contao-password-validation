@@ -61,7 +61,7 @@ final class PasswordChangeListener
 
         $configuration = $this->configuration->getConfiguration($userEntity);
 
-        $maxDays = $configuration['change_days'];
+        $maxDays = $configuration['change_days'] ?? null;
 
         if (!$maxDays) {
             return null;
