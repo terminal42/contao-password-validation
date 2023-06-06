@@ -1,51 +1,48 @@
 {
-  "name": "terminal42/contao-password-validation",
-  "type": "contao-bundle",
-  "description": "A Contao bundle that validates user passwords against your password policy",
-  "homepage": "https://github.com/terminal42/contao-password-validation",
-  "keywords": [
-    "contao",
-    "password",
-    "validation"
-  ],
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "terminal42 gmbh",
-      "homepage": "https://www.terminal42.ch"
+    "name": "terminal42/contao-password-validation",
+    "type": "contao-bundle",
+    "description": "A Contao bundle that validates user passwords against your password policy",
+    "homepage": "https://github.com/terminal42/contao-password-validation",
+    "keywords": ["contao", "password", "validation"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "terminal42 gmbh",
+            "homepage": "https://www.terminal42.ch"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/terminal42/contao-password-validation/issues",
+        "source": "https://github.com/terminal42/contao-password-validation"
+    },
+    "require": {
+        "php": "^7.1 || ^8.0",
+        "contao/core-bundle": "^4.9",
+        "doctrine/dbal": "^2.11 || ^3",
+        "paragonie/hidden-string": "^1.0",
+        "symfony/config": "^4.2 || ^5.0",
+        "symfony/dependency-injection": "^4.0 || ^5.0",
+        "symfony/http-client": "^4.0 || ^5.0",
+        "symfony/http-kernel": "^4.0 || ^5.0"
+    },
+    "require-dev": {
+        "contao/manager-plugin": "^2.7",
+        "terminal42/contao-build-tools": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "Terminal42\\PasswordValidationBundle\\": "src"
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "Terminal42\\PasswordValidationBundle\\ContaoManager\\Plugin"
+    },
+    "config": {
+        "allow-plugins": {
+            "contao-components/installer": true,
+            "contao/manager-plugin": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "terminal42/contao-build-tools": true
+        }
     }
-  ],
-  "support": {
-    "issues": "https://github.com/terminal42/contao-password-validation/issues",
-    "source": "https://github.com/terminal42/contao-password-validation"
-  },
-  "autoload": {
-    "psr-4": {
-      "Terminal42\\PasswordValidationBundle\\": "src"
-    }
-  },
-  "require": {
-    "php": ">=7.1",
-    "contao/core-bundle": "^4.9",
-    "doctrine/dbal": "^2.11 || ^3",
-    "paragonie/hidden-string": "^1.0",
-    "symfony/config": "^4.2 || ^5.0",
-    "symfony/dependency-injection": "^4.0 || ^5.0",
-    "symfony/http-client": "^4.0 || ^5.0",
-    "symfony/http-kernel": "^4.0 || ^5.0"
-  },
-  "require-dev": {
-    "contao/manager-plugin": "^2.7",
-    "contao/easy-coding-standard": "^4.0"
-  },
-  "extra": {
-    "contao-manager-plugin": "Terminal42\\PasswordValidationBundle\\ContaoManager\\Plugin"
-  },
-  "config": {
-    "allow-plugins": {
-      "contao-components/installer": true,
-      "contao/manager-plugin": true,
-      "dealerdirect/phpcodesniffer-composer-installer": true
-    }
-  }
 }
