@@ -35,7 +35,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
         }
 
         $configuration = $this->configuration->getConfiguration($context->getUserEntity());
-        $require = $configuration['require'];
+        $require = $configuration['require'] ?? null;
 
         if (!$require) {
             return true;
@@ -59,7 +59,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
             if ($actual < $minimum) {
                 if ('other' === $category) {
                     $errors[] = new PasswordValidatorException(
-                        sprintf($this->translate('required.other'), $minimum, $configuration['other_chars'])
+                        sprintf($this->translate('required.other'), $minimum, $configuration['other_chars'] ?? null)
                     );
                     continue;
                 }
@@ -69,7 +69,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
         }
 
         if (\count($errors) > 1) {
-            throw new PasswordValidatorException(sprintf($this->translate('required.summary'), $require['uppercase'], $require['lowercase'], $require['numbers'], $require['other'], $configuration['other_chars']));
+            throw new PasswordValidatorException(sprintf($this->translate('required.summary'), $require['uppercase'] ?? null, $require['lowercase'] ?? null, $require['numbers'] ?? null, $require['other'] ?? null, $configuration['other_chars'] ?? null));
         }
 
         if (\count($errors) > 0) {
@@ -112,7 +112,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
     private function getRequiredOtherCharactersForRegexp(ValidationContext $context): ?string
     {
         $config = $this->configuration->getConfiguration($context->getUserEntity());
-        $chars = $config['other_chars'];
+        $chars = $config['other_chars'] ?? null;
 
         if (!$chars) {
             return null;

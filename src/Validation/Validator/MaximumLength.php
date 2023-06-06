@@ -34,7 +34,7 @@ final class MaximumLength implements PasswordValidatorInterface
         }
 
         $configuration = $this->configuration->getConfiguration($context->getUserEntity());
-        $maximumLength = $configuration['max_length'];
+        $maximumLength = $configuration['max_length'] ?? null;
 
         if (!$maximumLength) {
             return true;

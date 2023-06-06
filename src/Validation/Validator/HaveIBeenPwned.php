@@ -38,7 +38,7 @@ final class HaveIBeenPwned implements PasswordValidatorInterface
         }
 
         $configuration = $this->configuration->getConfiguration($context->getUserEntity());
-        $minDataBreaches = $configuration['haveibeenpwned'];
+        $minDataBreaches = $configuration['haveibeenpwned'] ?? null;
 
         if (!$minDataBreaches) {
             return true;

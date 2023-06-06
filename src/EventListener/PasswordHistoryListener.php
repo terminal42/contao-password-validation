@@ -59,7 +59,7 @@ final class PasswordHistoryListener
 
         $configuration = $this->configuration->getConfiguration(FrontendUser::class);
 
-        $historyLength = (int) $configuration['password_history'];
+        $historyLength = (int) ($configuration['password_history'] ?? null);
 
         if (0 === $historyLength) {
             return;
@@ -106,7 +106,7 @@ final class PasswordHistoryListener
         }
 
         $configuration = $this->configuration->getConfiguration(BackendUser::class);
-        $historyLength = (int) $configuration['password_history'];
+        $historyLength = (int) ($configuration['password_history'] ?? null);
 
         if (0 === $historyLength) {
             return $password;

@@ -34,7 +34,7 @@ final class MinimumLength implements PasswordValidatorInterface
         }
 
         $configuration = $this->configuration->getConfiguration($context->getUserEntity());
-        $minimumLength = $configuration['min_length'];
+        $minimumLength = $configuration['min_length'] ?? null;
 
         if (!$minimumLength) {
             return true;
