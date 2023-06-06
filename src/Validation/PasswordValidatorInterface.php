@@ -19,9 +19,9 @@ interface PasswordValidatorInterface
     /**
      * @param ValidationContext $context holds the password to verify, the user id and the like
      *
-     * @throws PasswordValidatorException to decline the password and add a error message to the password widget
-     *
      * @return bool true to accept the password, false to decline the password
+     *
+     * @throws PasswordValidatorException to decline the password and add a error message to the password widget
      */
     public function validate(ValidationContext $context): bool;
 }
