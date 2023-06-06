@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<xliff version="1.1">
+    <file datatype="php" original="src/Resources/contao/languages/en/default.php" source-language="en">
+        <body>
+            <trans-unit id="ERR.passwordValidation.accountDisabled">
+                <source>This account has been locked! Please contact the website admin.</source>
+                <target>このアカウントはロックされています!  ウェブサイトの管理者に連絡してください。</target>
+            </trans-unit>
+            <trans-unit id="ERR.passwordValidation.noPwChangePage">
+                <source>Some page roots lack of a configured password-change page.</source>
+                <target>パスワードの変更のページを設定していないウェブサイトのルートのページがあります。</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
