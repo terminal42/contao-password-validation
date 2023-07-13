@@ -1,7 +1,7 @@
 services:
   Terminal42\PasswordValidationBundle\EventListener\PasswordRegexpListener:
     arguments:
-      ['@terminal42_password_validation.validator_manager', '@terminal42_password_validation.validator_configuration']
+      ['@terminal42_password_validation.validator_manager', '@terminal42_password_validation.validator_configuration', '@request_stack', '@contao.opt_in']
 
   Terminal42\PasswordValidationBundle\EventListener\PasswordHistoryListener:
     arguments:

@@ -13,12 +13,17 @@ declare(strict_types=1);
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
 use Contao\BackendUser;
+use Contao\CoreBundle\OptIn\OptIn;
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\FrontendUser;
+use Contao\Input;
+use Contao\MemberModel;
 use Contao\ModulePersonalData;
 use Contao\ModuleRegistration;
+use Contao\System;
 use Contao\Widget;
 use ParagonIE\HiddenString\HiddenString;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
@@ -34,11 +39,21 @@ final class PasswordRegexpListener
     private $validatorManager;
 
     private $configuration;
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+    /**
+     * @var OptIn
+     */
+    private $optIn;
 
-    public function __construct(ValidatorManager $validatorManager, ValidationConfiguration $configuration)
+    public function __construct(ValidatorManager $validatorManager, ValidationConfiguration $configuration, RequestStack $requestStack, OptIn $optIn)
     {
         $this->validatorManager = $validatorManager;
         $this->configuration = $configuration;
+        $this->requestStack = $requestStack;
+        $this->optIn = $optIn;
     }
 
     public function __invoke(string $rgxp, $input, Widget $widget): bool
@@ -56,7 +71,15 @@ final class PasswordRegexpListener
             $userId = null;
             $userEntity = FrontendUser::class;
         } elseif ('FE' === TL_MODE && FE_USER_LOGGED_IN) {
-            $userId = (int) FrontendUser::getInstance()->id;
+            $userId = (int)FrontendUser::getInstance()->id;
+            $userEntity = FrontendUser::class;
+        }
+        elseif ('FE' === TL_MODE && Input::post('FORM_SUBMIT') == $this->requestStack->getSession()->get('setPasswordToken')) {
+            if ((!$optInToken = $this->optIn->find(Input::get('token'))) || !$optInToken->isValid() || \count($arrRelated = $optInToken->getRelatedRecords()) != 1 || key($arrRelated) != 'tl_member' || \count($arrIds = current($arrRelated)) != 1 || (!$objMember = MemberModel::findByPk($arrIds[0]))) {
+                $userId = $objMember->id;
+            } else {
+                $userId = null;
+            }
             $userEntity = FrontendUser::class;
         } elseif (null !== $dc) {
             if ('tl_member' === $dc->table) {
