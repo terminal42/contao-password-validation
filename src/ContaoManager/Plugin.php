@@ -2,14 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of terminal42/contao-password-validation.
- *
- * (c) terminal42 gmbh <https://terminal42.ch>
- *
- * @license MIT
- */
-
 namespace Terminal42\PasswordValidationBundle\ContaoManager;
 
 use Contao\CoreBundle\ContaoCoreBundle;
@@ -24,11 +16,7 @@ final class Plugin implements BundlePluginInterface
     {
         return [
             BundleConfig::create(Terminal42PasswordValidationBundle::class)
-                ->setLoadAfter(
-                    [
-                        ContaoCoreBundle::class,
-                    ]
-                ),
+                ->setLoadAfter([ContaoCoreBundle::class]),
         ];
     }
 }

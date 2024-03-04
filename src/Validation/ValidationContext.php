@@ -21,15 +21,11 @@ use ParagonIE\HiddenString\HiddenString;
  */
 final class ValidationContext
 {
-    private $userEntity;
-    private $userId;
-    private $password;
-
-    public function __construct(string $userEntity, ?int $userId, HiddenString $password)
-    {
-        $this->userId = $userId;
-        $this->password = $password;
-        $this->userEntity = $userEntity;
+    public function __construct(
+        private readonly string $userEntity,
+        private readonly int|null $userId,
+        private readonly HiddenString $password,
+    ) {
     }
 
     public function isFrontendUser(): bool
@@ -42,7 +38,7 @@ final class ValidationContext
         return BackendUser::class === $this->userEntity;
     }
 
-    public function getUserId(): ?int
+    public function getUserId(): int|null
     {
         return $this->userId;
     }

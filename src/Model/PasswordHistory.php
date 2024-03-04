@@ -19,7 +19,7 @@ final class PasswordHistory extends Model
 {
     protected static $strTable = 'tl_password_history';
 
-    public static function addLog(string $entity, int $userId, string $hashedPassword): void
+    public static function addLog(string $entity, int $userId, #[\SensitiveParameter] string $hashedPassword): void
     {
         $log = new self();
 
@@ -31,7 +31,10 @@ final class PasswordHistory extends Model
         $log->save();
     }
 
-    public static function findHistory(string $entity, int $userId, int $length = 10, int $offset = 0): ?Collection
+    /**
+     * @return Collection<PasswordHistory>|null
+     */
+    public static function findHistory(string $entity, int $userId, int $length = 10, int $offset = 0): Collection|null
     {
         return self::findBy(
             [
@@ -47,11 +50,11 @@ final class PasswordHistory extends Model
                 'limit' => $length,
                 'offset' => $offset,
                 'return' => 'Collection',
-            ]
+            ],
         );
     }
 
-    public static function findCurrentLog(string $entity, int $userId): ?Model
+    public static function findCurrentLog(string $entity, int $userId): self|null
     {
         return self::findOneBy(
             [
@@ -64,7 +67,7 @@ final class PasswordHistory extends Model
             ],
             [
                 'order' => 'tstamp DESC',
-            ]
+            ],
         );
     }
 
@@ -73,7 +76,6 @@ final class PasswordHistory extends Model
         $history = self::findHistory($entity, $userId, 0, $lengthToKeep);
 
         if (null !== $history) {
-            /** @var PasswordHistory $log */
             foreach ($history as $log) {
                 $log->delete();
             }

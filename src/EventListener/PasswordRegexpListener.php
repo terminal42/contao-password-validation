@@ -2,18 +2,11 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of terminal42/contao-password-validation.
- *
- * (c) terminal42 gmbh <https://terminal42.ch>
- *
- * @license MIT
- */
-
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
 use Contao\BackendUser;
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\FrontendUser;
 use Contao\Input;
 use Contao\ModulePersonalData;
@@ -21,6 +14,7 @@ use Contao\ModuleRegistration;
 use Contao\Widget;
 use ParagonIE\HiddenString\HiddenString;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Security;
 use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
@@ -28,33 +22,27 @@ use Terminal42\PasswordValidationBundle\Validation\ValidatorManager;
 
 /**
  * This listener validates the password input by providing a regexp.
- *
- * @Hook("addCustomRegexp")
  */
+#[AsHook('addCustomRegexp')]
 final class PasswordRegexpListener
 {
-    private $validatorManager;
-
-    private $configuration;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    public function __construct(ValidatorManager $validatorManager, ValidationConfiguration $configuration, RequestStack $requestStack)
-    {
-        $this->validatorManager = $validatorManager;
-        $this->configuration = $configuration;
-        $this->requestStack = $requestStack;
+    public function __construct(
+        private readonly ValidatorManager $validatorManager,
+        private readonly ValidationConfiguration $configuration,
+        private readonly RequestStack $requestStack,
+        private readonly ScopeMatcher $scopeMatcher,
+        private readonly Security $security,
+    ) {
     }
 
-    public function __invoke(string $rgxp, $input, Widget $widget): bool
+    public function __invoke(string $rgxp, #[\SensitiveParameter] mixed $input, Widget $widget): bool
     {
         if ('terminal42_password_validation' !== $rgxp) {
             return false;
         }
 
         $dc = $widget->dataContainer;
+        $request = $this->requestStack->getCurrentRequest();
 
         if ($dc instanceof ModulePersonalData) {
             $userId = (int) FrontendUser::getInstance()->id;
@@ -62,11 +50,12 @@ final class PasswordRegexpListener
         } elseif ($dc instanceof ModuleRegistration) {
             $userId = null;
             $userEntity = FrontendUser::class;
-        } elseif ('FE' === TL_MODE && FE_USER_LOGGED_IN) {
+        } elseif ($request && $this->scopeMatcher->isFrontendRequest($request) && $this->security->isGranted('ROLE_MEMBER')) {
             $userId = (int) FrontendUser::getInstance()->id;
             $userEntity = FrontendUser::class;
         } elseif (
-            'FE' === TL_MODE
+            $request
+            && $this->scopeMatcher->isFrontendRequest($request)
             && Input::post('FORM_SUBMIT') === $this->requestStack->getSession()->get('setPasswordToken')
             && $widget->currentRecord
         ) {
@@ -106,9 +95,9 @@ final class PasswordRegexpListener
                     $widget->addError($e->getMessage());
 
                     return true;
-                } catch (\Throwable $e) {
-                    // Unhandled exceptions can be dangerous since the plaintext password is passed to this method.
-                    // The password would have been available in the stack trace.
+                } catch (\Throwable) {
+                    // Unhandled exceptions can be dangerous since the plaintext password is passed
+                    // to this method. The password would have been available in the stack trace.
                     $widget->addError('An unexpected error occurred.');
 
                     return true;

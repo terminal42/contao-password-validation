@@ -1,7 +1,8 @@
 services:
-  terminal42_password_validation.validator_configuration:
-    class: Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration
+    terminal42_password_validation.validator_configuration:
+        class: Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration
 
-  terminal42_password_validation.validator_manager:
-    class: Terminal42\PasswordValidationBundle\Validation\ValidatorManager
-    arguments: [ !tagged_iterator { tag: 'terminal42_password_validation.validator', index_by: 'alias' } ]
+    terminal42_password_validation.validator_manager:
+        class: Terminal42\PasswordValidationBundle\Validation\ValidatorManager
+        arguments:
+            - !tagged_iterator { tag: 'terminal42_password_validation.validator', index_by: 'alias' }

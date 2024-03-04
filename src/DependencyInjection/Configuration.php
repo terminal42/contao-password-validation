@@ -2,14 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of terminal42/contao-password-validation.
- *
- * (c) terminal42 gmbh <https://terminal42.ch>
- *
- * @license MIT
- */
-
 namespace Terminal42\PasswordValidationBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -20,7 +12,6 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('terminal42_password_validation');
-
         $treeBuilder
             ->getRootNode()
             ->useAttributeAsKey('entity')
@@ -29,10 +20,10 @@ final class Configuration implements ConfigurationInterface
                 ->integerNode('min_length')->end()
                 ->integerNode('max_length')->end()
                 ->integerNode('invalid_attempts')
-                    ->setDeprecated('The "%node%" option is not available since Contao 4.9 comes with improved brute-force-protection.')
+                    ->setDeprecated('terminal42/contao-password-validation', '1.0.8', 'The "%node%" option is not available since Contao 4.9 comes with improved brute-force-protection.')
                 ->end()
                 ->integerNode('nc_account_disabled')
-                    ->setDeprecated('The "%node%" option is not available since Contao 4.9 comes with improved brute-force-protection.')
+                    ->setDeprecated('terminal42/contao-password-validation', '1.0.8', 'The "%node%" option is not available since Contao 4.9 comes with improved brute-force-protection.')
                 ->end()
                 ->integerNode('password_history')->end()
                 ->integerNode('change_days')->end()

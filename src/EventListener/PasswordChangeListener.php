@@ -12,23 +12,19 @@ declare(strict_types=1);
 
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\User;
 use Terminal42\PasswordValidationBundle\Model\PasswordHistory;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 
 /**
  * This listener forces a password change for passwords being too old.
- *
- * @Hook("postLogin")
  */
+#[AsHook('postLogin')]
 final class PasswordChangeListener
 {
-    private $configuration;
-
-    public function __construct(ValidationConfiguration $configuration)
+    public function __construct(private readonly ValidationConfiguration $configuration)
     {
-        $this->configuration = $configuration;
     }
 
     public function __invoke(User $user): void
@@ -38,10 +34,12 @@ final class PasswordChangeListener
         }
 
         $userId = (int) $user->id;
-        $passwordLog = PasswordHistory::findCurrentLog(\get_class($user), $userId);
+        $passwordLog = PasswordHistory::findCurrentLog($user::class, $userId);
 
-        if (null === $passwordLog) {
+        if (!$passwordLog) {
             $this->forcePasswordChange($user);
+
+            return;
         }
 
         $maxAge = strtotime("-$maxDays days");
@@ -51,9 +49,9 @@ final class PasswordChangeListener
         }
     }
 
-    private function getMaxDays(User $user): ?int
+    private function getMaxDays(User $user): int|null
     {
-        $userEntity = \get_class($user);
+        $userEntity = $user::class;
 
         if (false === $this->configuration->hasConfiguration($userEntity)) {
             return null;
@@ -72,7 +70,7 @@ final class PasswordChangeListener
 
     private function forcePasswordChange(User $user): void
     {
-        $user->pwChange = 1;
+        $user->pwChange = true;
         $user->save();
     }
 }

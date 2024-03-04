@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace Terminal42\PasswordValidationBundle\Validation\Validator;
 
-use Contao\StringUtil;
-use Contao\System;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
 use Terminal42\PasswordValidationBundle\Validation\PasswordValidatorInterface;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
@@ -21,11 +20,10 @@ use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
 
 final class RequiredCharacters implements PasswordValidatorInterface
 {
-    private $configuration;
-
-    public function __construct(ValidationConfiguration $configuration)
-    {
-        $this->configuration = $configuration;
+    public function __construct(
+        private readonly ValidationConfiguration $configuration,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     public function validate(ValidationContext $context): bool
@@ -59,17 +57,27 @@ final class RequiredCharacters implements PasswordValidatorInterface
             if ($actual < $minimum) {
                 if ('other' === $category) {
                     $errors[] = new PasswordValidatorException(
-                        sprintf($this->translate('required.other'), $minimum, $configuration['other_chars'] ?? null)
+                        $this->translator->trans(
+                            'XPT.passwordValidation.required.other',
+                            [$minimum, $configuration['other_chars'] ?? ''],
+                            'contao_exception',
+                        ),
                     );
                     continue;
                 }
 
-                $errors[] = new PasswordValidatorException(sprintf($this->translate('required.'.$category), $minimum));
+                $errors[] = new PasswordValidatorException(
+                    $this->translator->trans(
+                        'XPT.passwordValidation.required.'.$category,
+                        [$minimum],
+                        'contao_exception',
+                    ),
+                );
             }
         }
 
         if (\count($errors) > 1) {
-            throw new PasswordValidatorException(sprintf($this->translate('required.summary'), $require['uppercase'] ?? null, $require['lowercase'] ?? null, $require['numbers'] ?? null, $require['other'] ?? null, $configuration['other_chars'] ?? null));
+            throw new PasswordValidatorException($this->translator->trans('XPT.passwordValidation.required.summary', [$require['uppercase'] ?? 0, $require['lowercase'] ?? 0, $require['numbers'] ?? 0, $require['other'] ?? 0, $configuration['other_chars'] ?? ''], 'contao_exception'));
         }
 
         if (\count($errors) > 0) {
@@ -79,7 +87,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
         return true;
     }
 
-    private function countRequirement(string $category, string $string, ValidationContext $context): ?int
+    private function countRequirement(string $category, string $string, ValidationContext $context): int|null
     {
         switch ($category) {
             case 'lowercase':
@@ -93,7 +101,7 @@ final class RequiredCharacters implements PasswordValidatorInterface
                 return \strlen($lowercase) - similar_text($string, $lowercase);
 
             case 'numbers':
-                return \strlen(preg_replace('/\D+/', '', $string));
+                return \strlen((string) preg_replace('/\D+/', '', $string));
 
             case 'other':
                 $chars = $this->getRequiredOtherCharactersForRegexp($context);
@@ -102,14 +110,14 @@ final class RequiredCharacters implements PasswordValidatorInterface
                     return null;
                 }
 
-                return \strlen(preg_replace('/[^'.$chars.']+/', '', $string));
+                return \strlen((string) preg_replace('/[^'.$chars.']+/', '', $string));
 
             default:
                 return null;
         }
     }
 
-    private function getRequiredOtherCharactersForRegexp(ValidationContext $context): ?string
+    private function getRequiredOtherCharactersForRegexp(ValidationContext $context): string|null
     {
         $config = $this->configuration->getConfiguration($context->getUserEntity());
         $chars = $config['other_chars'] ?? null;
@@ -120,19 +128,10 @@ final class RequiredCharacters implements PasswordValidatorInterface
 
         $return = '';
 
-        foreach (array_unique(preg_split('//u', $chars, -1, PREG_SPLIT_NO_EMPTY)) as $char) {
+        foreach (array_unique(preg_split('//u', (string) $chars, -1, PREG_SPLIT_NO_EMPTY)) as $char) {
             $return .= '\\'.$char;
         }
 
         return $return;
-    }
-
-    private function translate(string $key)
-    {
-        System::loadLanguageFile('exception');
-
-        [$key1, $key2] = StringUtil::trimsplit('.', $key);
-
-        return $GLOBALS['TL_LANG']['XPT']['passwordValidation'][$key1][$key2];
     }
 }

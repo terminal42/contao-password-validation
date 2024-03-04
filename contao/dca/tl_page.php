@@ -11,7 +11,7 @@ $paletteManipulator = PaletteManipulator::create()
 try {
     $paletteManipulator->applyToPalette('root', 'tl_page');
     $paletteManipulator->applyToPalette('rootfallback', 'tl_page');
-} catch (PaletteNotFoundException $e) {
+} catch (PaletteNotFoundException) {
 }
 
 $GLOBALS['TL_DCA']['tl_page']['fields']['pwChangePage'] = [

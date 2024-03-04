@@ -32,7 +32,7 @@ final class ValidationConfiguration
         return \array_key_exists($entityName, $this->configurations);
     }
 
-    public function getConfiguration(string $entityName): ?array
+    public function getConfiguration(string $entityName): array|null
     {
         return $this->configurations[$entityName];
     }

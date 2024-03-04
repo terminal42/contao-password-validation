@@ -1,29 +1,33 @@
 services:
-  Terminal42\PasswordValidationBundle\EventListener\PasswordRegexpListener:
-    arguments:
-      - '@terminal42_password_validation.validator_manager'
-      - '@terminal42_password_validation.validator_configuration'
-      - '@request_stack'
+    Terminal42\PasswordValidationBundle\EventListener\PasswordRegexpListener:
+        arguments:
+            - '@terminal42_password_validation.validator_manager'
+            - '@terminal42_password_validation.validator_configuration'
+            - '@request_stack'
+            - '@contao.routing.scope_matcher'
+            - '@security.helper'
 
-  Terminal42\PasswordValidationBundle\EventListener\PasswordHistoryListener:
-    arguments:
-      ['@terminal42_password_validation.validator_configuration', '@security.encoder_factory', '@database_connection']
+    Terminal42\PasswordValidationBundle\EventListener\PasswordHistoryListener:
+        arguments:
+            - '@terminal42_password_validation.validator_configuration'
+            - '@security.password_hasher_factory'
+            - '@database_connection'
 
-  Terminal42\PasswordValidationBundle\EventListener\PasswordChangeListener:
-    arguments:
-      ['@terminal42_password_validation.validator_configuration']
+    Terminal42\PasswordValidationBundle\EventListener\PasswordChangeListener:
+        arguments:
+            - '@terminal42_password_validation.validator_configuration'
 
-  Terminal42\PasswordValidationBundle\EventListener\NoPwChangePageWarning:
-    arguments:
-      ['@terminal42_password_validation.validator_configuration']
+    Terminal42\PasswordValidationBundle\EventListener\NoPwChangePageWarning:
+        arguments:
+            - '@terminal42_password_validation.validator_configuration'
+            - '@translator'
 
-  Terminal42\PasswordValidationBundle\EventListener\RedirectToPasswordChangePageListener:
-    arguments:
-      - '@contao.framework'
-      - '@security.token_storage'
-      - '@security.authentication.trust_resolver'
-      - '@contao.routing.scope_matcher'
-    tags:
-      - kernel.event_listener
+    Terminal42\PasswordValidationBundle\EventListener\RedirectToPasswordChangePageListener:
+        arguments:
+            - '@contao.framework'
+            - '@security.token_storage'
+            - '@contao.routing.scope_matcher'
+        tags:
+            - kernel.event_listener
 
-  Terminal42\PasswordValidationBundle\EventListener\SetNewPasswordListener: ~
+    Terminal42\PasswordValidationBundle\EventListener\SetNewPasswordListener: ~

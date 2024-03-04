@@ -2,14 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of terminal42/contao-password-validation.
- *
- * (c) terminal42 gmbh <https://terminal42.ch>
- *
- * @license MIT
- */
-
 namespace Terminal42\PasswordValidationBundle\Validation;
 
 /**
@@ -18,9 +10,9 @@ namespace Terminal42\PasswordValidationBundle\Validation;
 final class ValidatorManager
 {
     /**
-     * @var array<PasswordValidatorInterface>
+     * @var array<string, PasswordValidatorInterface>
      */
-    private $validators = [];
+    private array $validators;
 
     public function __construct(iterable $validators)
     {
@@ -32,12 +24,15 @@ final class ValidatorManager
         $this->validators[$alias] = $validator;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getValidatorNames(): array
     {
         return array_keys($this->validators);
     }
 
-    public function getValidator($name): ?PasswordValidatorInterface
+    public function getValidator(string $name): PasswordValidatorInterface|null
     {
         return $this->validators[$name] ?? null;
     }

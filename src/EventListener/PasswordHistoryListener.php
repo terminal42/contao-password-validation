@@ -2,19 +2,11 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of terminal42/contao-password-validation.
- *
- * (c) terminal42 gmbh <https://terminal42.ch>
- *
- * @license MIT
- */
-
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
 use Contao\BackendUser;
-use Contao\CoreBundle\ServiceAnnotation\Callback;
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Database\Result as DatabaseResult;
 use Contao\DataContainer;
 use Contao\FrontendUser;
@@ -22,7 +14,7 @@ use Contao\MemberModel;
 use Contao\StringUtil;
 use Contao\User;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Terminal42\PasswordValidationBundle\Model\PasswordHistory;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 
@@ -31,27 +23,20 @@ use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
  */
 final class PasswordHistoryListener
 {
-    private $configuration;
-
-    private $encoderFactory;
-
-    private $connection;
-
-    public function __construct(ValidationConfiguration $configuration, EncoderFactoryInterface $encoderFactory, Connection $connection)
-    {
-        $this->configuration = $configuration;
-        $this->encoderFactory = $encoderFactory;
-        $this->connection = $connection;
+    public function __construct(
+        private readonly ValidationConfiguration $configuration,
+        private readonly PasswordHasherFactoryInterface $encoderFactory,
+        private readonly Connection $connection,
+    ) {
     }
 
     /**
      * This hook is triggered for frontend users exclusively (ModuleChangePassword and save_callback).
      *
-     * @Hook("setNewPassword")
-     *
      * @param MemberModel|DatabaseResult $member
      */
-    public function onSetNewPassword($member, string $password): void
+    #[AsHook('setNewPassword')]
+    public function onSetNewPassword($member, #[\SensitiveParameter] string $password): void
     {
         if (false === $this->configuration->hasConfiguration(FrontendUser::class)) {
             return;
@@ -96,10 +81,9 @@ final class PasswordHistoryListener
 
     /**
      * This listener keeps track of the backend user's passwords.
-     *
-     * @Callback(table="tl_user", target="fields.password.save")
      */
-    public function onBackendSaveCallback(string $password, DataContainer $dc): string
+    #[AsCallback(table: 'tl_user', target: 'fields.password.save')]
+    public function onBackendSaveCallback(#[\SensitiveParameter] string $password, DataContainer $dc): string
     {
         if (false === $this->configuration->hasConfiguration(BackendUser::class)) {
             return $password;
@@ -115,7 +99,7 @@ final class PasswordHistoryListener
         $hash = $password;
 
         if (!$this->isHashedPassword($hash)) {
-            $hash = $this->hashPassword($hash);
+            $hash = $this->encoderFactory->getPasswordHasher(User::class)->hash($hash);
         }
 
         $userId = (int) $dc->id;
@@ -125,13 +109,8 @@ final class PasswordHistoryListener
         return $password;
     }
 
-    private function isHashedPassword(string $password): bool
+    private function isHashedPassword(#[\SensitiveParameter] string $password): bool
     {
         return (bool) password_get_info($password)['algo'];
-    }
-
-    private function hashPassword(string $password): string
-    {
-        return $this->encoderFactory->getEncoder(User::class)->encodePassword($password, null);
     }
 }

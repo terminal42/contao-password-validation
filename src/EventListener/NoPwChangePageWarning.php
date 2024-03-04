@@ -2,23 +2,16 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of terminal42/contao-password-validation.
- *
- * (c) terminal42 gmbh <https://terminal42.ch>
- *
- * @license MIT
- */
-
 namespace Terminal42\PasswordValidationBundle\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Callback;
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\FrontendUser;
 use Contao\Input;
 use Contao\MemberModel;
 use Contao\Message;
 use Contao\PageModel;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 
 /**
@@ -26,16 +19,13 @@ use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
  */
 final class NoPwChangePageWarning
 {
-    private $configuration;
-
-    public function __construct(ValidationConfiguration $configuration)
-    {
-        $this->configuration = $configuration;
+    public function __construct(
+        private readonly ValidationConfiguration $configuration,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
-    /**
-     * @Hook("getSystemMessages")
-     */
+    #[AsHook('getSystemMessages')]
     public function onGetSystemMessages(): string
     {
         $needsPwChangePage = false;
@@ -62,16 +52,14 @@ final class NoPwChangePageWarning
 
         $rootPages = PageModel::findBy(["tl_page.type='root' AND tl_page.pwChangePage=''"], []);
 
-        if ($needsPwChangePage && null !== $rootPages) {
-            return '<p class="tl_error">'.$this->translate('noPwChangePage').'</p>';
+        if (null !== $rootPages) {
+            return '<p class="tl_error">'.$this->translator->trans('ERR.passwordValidation.noPwChangePage', [], 'contao_default').'</p>';
         }
 
         return '';
     }
 
-    /**
-     * @Callback(table="tl_page", target="config.onload")
-     */
+    #[AsCallback(table: 'tl_page', target: 'config.onload')]
     public function tlPageShowWarning(): void
     {
         if (Input::get('act')) {
@@ -79,10 +67,5 @@ final class NoPwChangePageWarning
         }
 
         Message::addRaw($this->onGetSystemMessages());
-    }
-
-    private function translate(string $key)
-    {
-        return $GLOBALS['TL_LANG']['ERR']['passwordValidation'][$key];
     }
 }

@@ -1,7 +1,7 @@
 terminal42/contao-password-validation
 =====================================
 
-A Contao 4 bundle that validates user passwords against your password policy.
+A Contao bundle that validates user passwords against your password policy.
 
 
 ## Features
