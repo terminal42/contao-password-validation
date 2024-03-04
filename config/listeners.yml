@@ -1,7 +1,9 @@
 services:
   Terminal42\PasswordValidationBundle\EventListener\PasswordRegexpListener:
     arguments:
-      ['@terminal42_password_validation.validator_manager', '@terminal42_password_validation.validator_configuration']
+      - '@terminal42_password_validation.validator_manager'
+      - '@terminal42_password_validation.validator_configuration'
+      - '@request_stack'
 
   Terminal42\PasswordValidationBundle\EventListener\PasswordHistoryListener:
     arguments:

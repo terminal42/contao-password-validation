@@ -15,10 +15,12 @@ namespace Terminal42\PasswordValidationBundle\EventListener;
 use Contao\BackendUser;
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\FrontendUser;
+use Contao\Input;
 use Contao\ModulePersonalData;
 use Contao\ModuleRegistration;
 use Contao\Widget;
 use ParagonIE\HiddenString\HiddenString;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
@@ -34,11 +36,16 @@ final class PasswordRegexpListener
     private $validatorManager;
 
     private $configuration;
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
 
-    public function __construct(ValidatorManager $validatorManager, ValidationConfiguration $configuration)
+    public function __construct(ValidatorManager $validatorManager, ValidationConfiguration $configuration, RequestStack $requestStack)
     {
         $this->validatorManager = $validatorManager;
         $this->configuration = $configuration;
+        $this->requestStack = $requestStack;
     }
 
     public function __invoke(string $rgxp, $input, Widget $widget): bool
@@ -57,6 +64,14 @@ final class PasswordRegexpListener
             $userEntity = FrontendUser::class;
         } elseif ('FE' === TL_MODE && FE_USER_LOGGED_IN) {
             $userId = (int) FrontendUser::getInstance()->id;
+            $userEntity = FrontendUser::class;
+        } elseif (
+            'FE' === TL_MODE
+            && Input::post('FORM_SUBMIT') === $this->requestStack->getSession()->get('setPasswordToken')
+            && $widget->currentRecord
+        ) {
+            // handles ModulePassword in Contao 4.13
+            $userId = $widget->currentRecord;
             $userEntity = FrontendUser::class;
         } elseif (null !== $dc) {
             if ('tl_member' === $dc->table) {
