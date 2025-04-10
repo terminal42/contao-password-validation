@@ -6,7 +6,6 @@ namespace Terminal42\PasswordValidationBundle\EventListener;
 
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Exception\RedirectResponseException;
-use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\FrontendUser;
 use Contao\PageModel;
@@ -16,7 +15,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 final readonly class RedirectToPasswordChangePageListener
 {
     public function __construct(
-        private ContaoFramework $framework,
         private TokenStorageInterface $tokenStorage,
         private ScopeMatcher $scopeMatcher,
     ) {
@@ -36,12 +34,10 @@ final readonly class RedirectToPasswordChangePageListener
             return;
         }
 
-        /** @var PageModel $adapter */
-        $adapter = $this->framework->getAdapter(PageModel::class);
-        $rootPage = $adapter->findById($page->rootId);
+        $rootPage = PageModel::findById($page->rootId);
 
         // Search for password-change page
-        $pwChangePage = $adapter->findPublishedById($rootPage->pwChangePage ?? 0);
+        $pwChangePage = PageModel::findPublishedById($rootPage->pwChangePage ?? 0);
 
         if (!$pwChangePage instanceof PageModel) {
             throw new PageNotFoundException('No password-change page found.');

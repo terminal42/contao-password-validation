@@ -20,7 +20,7 @@ final class ValidationConfiguration
     /**
      * @var array<string, array<string, mixed>> Configuration parameters in the format [Contao\FrontendUser => [ min_chars => 8, max_chars => 20 ]]
      */
-    private $configurations = [];
+    private array $configurations = [];
 
     public function addConfiguration(string $entityName, array $configuration): void
     {
@@ -34,6 +34,6 @@ final class ValidationConfiguration
 
     public function getConfiguration(string $entityName): array|null
     {
-        return $this->configurations[$entityName];
+        return $this->configurations[$entityName] ?? null;
     }
 }

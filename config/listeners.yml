@@ -24,7 +24,6 @@ services:
 
     Terminal42\PasswordValidationBundle\EventListener\RedirectToPasswordChangePageListener:
         arguments:
-            - '@contao.framework'
             - '@security.token_storage'
             - '@contao.routing.scope_matcher'
         tags:
