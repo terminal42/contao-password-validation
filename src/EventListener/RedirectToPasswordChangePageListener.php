@@ -11,14 +11,14 @@ use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\FrontendUser;
 use Contao\PageModel;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-final class RedirectToPasswordChangePageListener
+final readonly class RedirectToPasswordChangePageListener
 {
     public function __construct(
-        private readonly ContaoFramework $framework,
-        private readonly Security $security,
-        private readonly ScopeMatcher $scopeMatcher,
+        private ContaoFramework $framework,
+        private TokenStorageInterface $tokenStorage,
+        private ScopeMatcher $scopeMatcher,
     ) {
     }
 
@@ -29,7 +29,7 @@ final class RedirectToPasswordChangePageListener
         }
 
         $request = $event->getRequest();
-        $user = $this->security->getUser();
+        $user = $this->tokenStorage->getToken()?->getUser();
         $page = $request->attributes->get('pageModel');
 
         if (!$page instanceof PageModel || !$user instanceof FrontendUser || !$user->pwChange) {
@@ -38,7 +38,7 @@ final class RedirectToPasswordChangePageListener
 
         /** @var PageModel $adapter */
         $adapter = $this->framework->getAdapter(PageModel::class);
-        $rootPage = $adapter->findByPk($page->rootId);
+        $rootPage = $adapter->findById($page->rootId);
 
         // Search for password-change page
         $pwChangePage = $adapter->findPublishedById($rootPage->pwChangePage ?? 0);

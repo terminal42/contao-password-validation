@@ -27,13 +27,19 @@
         "forum": "https://community.contao.org"
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "contao/core-bundle": "^4.13 || ^5.0",
+        "doctrine/dbal": "^3.3",
         "paragonie/hidden-string": "^1.0",
-        "symfony/config": "^5.0 || ^6.0",
-        "symfony/dependency-injection": "^5.0 || ^6.0",
-        "symfony/http-client": "^5.0 || ^6.0",
-        "symfony/http-kernel": "^5.0 || ^6.0"
+        "symfony/config": "^5.0 || ^6.0 || ^7.0",
+        "symfony/dependency-injection": "^5.0 || ^6.0 || ^7.0",
+        "symfony/http-client-contracts": "^3",
+        "symfony/http-foundation": "^5.0 || ^6.0 || ^7.0",
+        "symfony/http-kernel": "^5.0 || ^6.0 || ^7.0",
+        "symfony/password-hasher": "^5.0 || ^6.0 || ^7.0",
+        "symfony/security-core": "^5.0 || ^6.0 || ^7.0",
+        "symfony/string": "^5.0 || ^6.0 || ^7.0",
+        "symfony/translation-contracts": "^3"
     },
     "require-dev": {
         "contao/manager-plugin": "^2.7",
@@ -46,5 +52,13 @@
     },
     "extra": {
         "contao-manager-plugin": "Terminal42\\PasswordValidationBundle\\ContaoManager\\Plugin"
+    },
+    "config": {
+        "allow-plugins": {
+            "contao-components/installer": false,
+            "php-http/discovery": false,
+            "contao/manager-plugin": false,
+            "terminal42/contao-build-tools": true
+        }
     }
 }

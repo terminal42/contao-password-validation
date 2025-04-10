@@ -13,12 +13,12 @@ use Terminal42\PasswordValidationBundle\Validation\PasswordValidatorInterface;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
 
-final class PasswordHistory implements PasswordValidatorInterface
+final readonly class PasswordHistory implements PasswordValidatorInterface
 {
     public function __construct(
-        private readonly ValidationConfiguration $configuration,
-        private readonly PasswordHasherFactoryInterface $encoderFactory,
-        private readonly TranslatorInterface $translator,
+        private ValidationConfiguration $configuration,
+        private PasswordHasherFactoryInterface $encoderFactory,
+        private TranslatorInterface $translator,
     ) {
     }
 

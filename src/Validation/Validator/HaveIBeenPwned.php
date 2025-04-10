@@ -12,12 +12,12 @@ use Terminal42\PasswordValidationBundle\Validation\PasswordValidatorInterface;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
 
-final class HaveIBeenPwned implements PasswordValidatorInterface
+final readonly class HaveIBeenPwned implements PasswordValidatorInterface
 {
     public function __construct(
-        private readonly ValidationConfiguration $configuration,
-        private readonly HttpClientInterface $client,
-        private readonly TranslatorInterface $translator,
+        private ValidationConfiguration $configuration,
+        private HttpClientInterface $client,
+        private TranslatorInterface $translator,
     ) {
     }
 

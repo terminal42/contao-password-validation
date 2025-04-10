@@ -21,9 +21,9 @@ use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
  * This listener forces a password change for passwords being too old.
  */
 #[AsHook('postLogin')]
-final class PasswordChangeListener
+final readonly class PasswordChangeListener
 {
-    public function __construct(private readonly ValidationConfiguration $configuration)
+    public function __construct(private ValidationConfiguration $configuration)
     {
     }
 

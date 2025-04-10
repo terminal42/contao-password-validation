@@ -18,11 +18,13 @@ use Terminal42\PasswordValidationBundle\Validation\PasswordValidatorInterface;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
 
-final class RequiredCharacters implements PasswordValidatorInterface
+use function Symfony\Component\String\s;
+
+final readonly class RequiredCharacters implements PasswordValidatorInterface
 {
     public function __construct(
-        private readonly ValidationConfiguration $configuration,
-        private readonly TranslatorInterface $translator,
+        private ValidationConfiguration $configuration,
+        private TranslatorInterface $translator,
     ) {
     }
 
@@ -91,12 +93,12 @@ final class RequiredCharacters implements PasswordValidatorInterface
     {
         switch ($category) {
             case 'lowercase':
-                $uppercase = mb_strtoupper($string);
+                $uppercase = s($string)->upper()->toString();
 
                 return \strlen($uppercase) - similar_text($string, $uppercase);
 
             case 'uppercase':
-                $lowercase = mb_strtolower($string);
+                $lowercase = s($string)->lower()->toString();
 
                 return \strlen($lowercase) - similar_text($string, $lowercase);
 

@@ -21,12 +21,12 @@ use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 /**
  * This listener adds the new password to the password history.
  */
-final class PasswordHistoryListener
+final readonly class PasswordHistoryListener
 {
     public function __construct(
-        private readonly ValidationConfiguration $configuration,
-        private readonly PasswordHasherFactoryInterface $encoderFactory,
-        private readonly Connection $connection,
+        private ValidationConfiguration $configuration,
+        private PasswordHasherFactoryInterface $encoderFactory,
+        private Connection $connection,
     ) {
     }
 

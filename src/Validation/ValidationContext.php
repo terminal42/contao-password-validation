@@ -19,12 +19,12 @@ use ParagonIE\HiddenString\HiddenString;
 /**
  * This class holds useful information (e.g. the password to validate) for the validator.
  */
-final class ValidationContext
+final readonly class ValidationContext
 {
     public function __construct(
-        private readonly string $userEntity,
-        private readonly int|null $userId,
-        private readonly HiddenString $password,
+        private string $userEntity,
+        private int|null $userId,
+        private HiddenString $password,
     ) {
     }
 

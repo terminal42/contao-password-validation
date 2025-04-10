@@ -5,7 +5,7 @@ services:
             - '@terminal42_password_validation.validator_configuration'
             - '@request_stack'
             - '@contao.routing.scope_matcher'
-            - '@security.helper'
+            - '@security.authorization_checker'
 
     Terminal42\PasswordValidationBundle\EventListener\PasswordHistoryListener:
         arguments:
@@ -25,7 +25,7 @@ services:
     Terminal42\PasswordValidationBundle\EventListener\RedirectToPasswordChangePageListener:
         arguments:
             - '@contao.framework'
-            - '@security.helper'
+            - '@security.token_storage'
             - '@contao.routing.scope_matcher'
         tags:
             - kernel.event_listener

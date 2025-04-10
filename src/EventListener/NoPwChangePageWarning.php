@@ -17,11 +17,11 @@ use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 /**
  * This class adds a warning if some root pages lack of a configured password-change page.
  */
-final class NoPwChangePageWarning
+final readonly class NoPwChangePageWarning
 {
     public function __construct(
-        private readonly ValidationConfiguration $configuration,
-        private readonly TranslatorInterface $translator,
+        private ValidationConfiguration $configuration,
+        private TranslatorInterface $translator,
     ) {
     }
 

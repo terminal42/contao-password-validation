@@ -14,7 +14,7 @@ use Contao\ModuleRegistration;
 use Contao\Widget;
 use ParagonIE\HiddenString\HiddenString;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Terminal42\PasswordValidationBundle\Exception\PasswordValidatorException;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
@@ -24,14 +24,14 @@ use Terminal42\PasswordValidationBundle\Validation\ValidatorManager;
  * This listener validates the password input by providing a regexp.
  */
 #[AsHook('addCustomRegexp')]
-final class PasswordRegexpListener
+final readonly class PasswordRegexpListener
 {
     public function __construct(
-        private readonly ValidatorManager $validatorManager,
-        private readonly ValidationConfiguration $configuration,
-        private readonly RequestStack $requestStack,
-        private readonly ScopeMatcher $scopeMatcher,
-        private readonly Security $security,
+        private ValidatorManager $validatorManager,
+        private ValidationConfiguration $configuration,
+        private RequestStack $requestStack,
+        private ScopeMatcher $scopeMatcher,
+        private AuthorizationCheckerInterface $authorizationChecker,
     ) {
     }
 
@@ -50,7 +50,7 @@ final class PasswordRegexpListener
         } elseif ($dc instanceof ModuleRegistration) {
             $userId = null;
             $userEntity = FrontendUser::class;
-        } elseif ($request && $this->scopeMatcher->isFrontendRequest($request) && $this->security->isGranted('ROLE_MEMBER')) {
+        } elseif ($request && $this->scopeMatcher->isFrontendRequest($request) && $this->authorizationChecker->isGranted('ROLE_MEMBER')) {
             $userId = (int) FrontendUser::getInstance()->id;
             $userEntity = FrontendUser::class;
         } elseif (

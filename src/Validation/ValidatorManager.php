@@ -14,6 +14,9 @@ final class ValidatorManager
      */
     private array $validators;
 
+    /**
+     * @param iterable<PasswordValidatorInterface> $validators
+     */
     public function __construct(iterable $validators)
     {
         $this->validators = $validators instanceof \Traversable ? iterator_to_array($validators) : $validators;

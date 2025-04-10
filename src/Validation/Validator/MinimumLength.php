@@ -10,11 +10,11 @@ use Terminal42\PasswordValidationBundle\Validation\PasswordValidatorInterface;
 use Terminal42\PasswordValidationBundle\Validation\ValidationConfiguration;
 use Terminal42\PasswordValidationBundle\Validation\ValidationContext;
 
-final class MinimumLength implements PasswordValidatorInterface
+final readonly class MinimumLength implements PasswordValidatorInterface
 {
     public function __construct(
-        private readonly ValidationConfiguration $configuration,
-        private readonly TranslatorInterface $translator,
+        private ValidationConfiguration $configuration,
+        private TranslatorInterface $translator,
     ) {
     }
 
