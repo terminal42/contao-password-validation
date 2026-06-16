@@ -72,6 +72,9 @@ final readonly class PasswordRegexpListener
             } else {
                 return true;
             }
+        } elseif ('password' === $widget->type && $request && $this->scopeMatcher->isFrontendRequest($request)) {
+            $userId = null;
+            $userEntity = 'Contao\Form';
         } else {
             return true;
         }

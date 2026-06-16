@@ -58,6 +58,15 @@ terminal42_password_validation:
   Contao\BackendUser:
     min_length: 10
     haveibeenpwned: 1
+  Contao\Form:
+    min_length: 10
+    max_length: 20
+    require:
+      uppercase: 1
+      lowercase: 1
+      numbers: 1
+      other: 1
+    other_chars: "+*ç%&/()=?"
 ```
 
 Parameter | Purpose
